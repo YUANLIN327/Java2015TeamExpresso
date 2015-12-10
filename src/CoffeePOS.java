@@ -327,8 +327,7 @@ public class CoffeePOS extends JFrame {
 				txtAmountTendered.setText(tenderedbd.toString());
 				txtChange.setText(changebd.toString());
 				triggerReceipt();               
-                ta.append("Total Amount Due: " + txtAmountDue.getText() + "\n"+ "Amount Tendered: " + txtAmountTendered.getText() + "\n"+
-                 "Change: " + txtChange.getText());
+ 
                 clearOrder();
 
 		    }
@@ -1373,8 +1372,13 @@ public class CoffeePOS extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
-				String report$=ta.getText();
+			  ta.append("Total Amount Due: " + txtAmountDue.getText() + "\n"+ "Amount Tendered: " + txtAmountTendered.getText() + "\n"+
+                   "Change: " + txtChange.getText());
+			  String report$="";
+			  report$ +="Thank you for shopping at iCoffeeShop. We really appreciate your business. \n";
+			  report$ +="Your order total is $"+txtAmountDue.getText()+".\n";
+			  
+			  
               String mailto="John_Carlson@Baylor.edu?SUBJECT=Reciept [iCoffee Shoppe]&BODY=" + report$;
 
               URI uri=null;
@@ -1470,123 +1474,4 @@ public class CoffeePOS extends JFrame {
 }
 
 
-	//private void triggerReceipt() {
-//		 Receipt.setSize(500,500);
-//         Receipt.setVisible(true);                 
-//         Receipt.getContentPane().add(ta, BorderLayout.CENTER);
-//         JButton emailBtn = new JButton("Email Reciept");
-//         ta.setText("");
-//         ta.setFont(new Font("Dialog", Font.PLAIN, 30));
-//         drawLine();
-//         ta.append("\tiCoffeeShoppe\n");
-//         ta.append("\tRECIEPT\n");
-//         drawLine();
-//         Receipt.getContentPane().add(emailBtn, BorderLayout.SOUTH);
-//            emailBtn.addActionListener(new ActionListener(){
-//                 @Override
-//                 public void actionPerformed(ActionEvent e) {
-//
-//                     String report$=ta.getText();
-//                     String mailto="Claudia_zamudio@baylor.edu?SUBJECT=Reciept [iCoffee Shoppe]&BODY=" + report$;
-//
-//                     URI uri=null;
-//
-//                     try{
-//                         uri=new URI("mailto", mailto, null);
-//                         try {
-//                             desktop.mail(uri);
-//                         } catch (IOException e1) {
-//                             // TODO Auto-generated catch block
-//                             e1.printStackTrace();
-//                         }
-//                     }catch (URISyntaxException e1){
-//                         e1.printStackTrace();
-//
-//                     }
-//                 }
-//
-//             });
-//	}
-//	
-//	@SuppressWarnings("serial")
-//	class ReceiptsPanel extends JPanel implements Printable {
-//
-//	Font f = new Font("Helvetica", Font.PLAIN, 10);
-//
-//	/**
-//	* paintComponent() contains the code to draw the receipt:
-//	*/
-//	public void paintComponent(Graphics graphics) {
-//	super.paintComponent(graphics);
-//
-//
-//	this.setLayout(null);
-//
-//	// make it smooth:
-//	Graphics2D g2d = (Graphics2D) graphics;
-//	RenderingHints hints = new RenderingHints(
-//	RenderingHints.KEY_TEXT_ANTIALIASING,
-//	RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-//	g2d.setRenderingHints(hints);
-//
-//
-//
-//	// date/time stamp:
-//	Calendar cal = new GregorianCalendar();
-//	g2d.setColor(Color.BLACK);
-//	g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
-//	g2d.drawString(" iCoffee Shoppe Reciept", 24, 70);
-//	g2d.drawString((cal.get(Calendar.MONTH) + 1) 
-//	+ "/" + cal.get(Calendar.DAY_OF_MONTH) 
-//	+ "/" + cal.get(Calendar.YEAR)
-//	+ "  " + cal.get(Calendar.HOUR_OF_DAY) 
-//	+ ":" + cal.get(Calendar.MINUTE) 
-//	+ " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 66, 90);
-//
-//
-////	// list of ordered items:
-////	JLabel[] labelstoo = new JLabel[orders.size()];
-////	for (int i = 0; i < orders.size(); i++) {
-////	labelstoo[i] = new JLabel("" + (i + 1) + ". " +  orders.get(i).toShortString());
-////	labelstoo[i].setFont(f);
-////	labelstoo[i].setBounds(10, 110+(i*12), 240, 12);
-////	add(labelstoo[i]);
-////	}
-//
-//
-//	// total:
-//	g2d.setFont(new Font("Helvetica", Font.PLAIN, 18));
-//
-//
-//	g2d.drawString("Total: " + txtAmountDue.getText(), 74, getHeight()-55);
-//
-//
-//	// slogan:
-//	g2d.setFont(f.deriveFont(Font.ITALIC, 15));
-//	g2d.drawString("Have a blessed day!", 47, getHeight()-30);
-//
-//	}
-//
-//	/**
-//	* print() is required when we implement printable:
-//	*/
-//	@Override
-//	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-//	throws PrinterException {
-//		if (pageIndex > 0) {
-//			return(NO_SUCH_PAGE);
-//		} else {
-//			Graphics2D g2d = (Graphics2D) graphics;
-//			g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-//			paint(g2d);
-//			return(PAGE_EXISTS);
-//			}
-//		}
-//
-//
-//	}
-//	
-//	
-//		
-//		
-//}
+
