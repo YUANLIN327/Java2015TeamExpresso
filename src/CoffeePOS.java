@@ -1432,14 +1432,11 @@ public class CoffeePOS extends JFrame {
 
 				
 				// list of ordered items:
-				JLabel[] labelstoo = new JLabel[orders.size()];
-				for (int i = 0; i < orders.size(); i++) {
-					labelstoo[i] = new JLabel("" + (i + 1) + ". " +  orders.get(i).toString());
-					labelstoo[i].setFont(f);
-					labelstoo[i].setBounds(10, 110+(i*12), 240, 12);
-					add(labelstoo[i]);
-				}
-
+			    Order currOrder = orders.get(orders.size()-1);
+                for (int i = 0; i < currOrder.orderitems.size(); i++) {
+                    g2d.drawString( currOrder.orderitems.get(i).name, 70, 120+15*i);
+                   
+                }
 				
 				// total:
 				g2d.setFont(new Font("Helvetica", Font.PLAIN, 18));
