@@ -50,7 +50,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import CoffeePOS.ReceiptsPanel;
+
 
 public class CoffeePOS extends JFrame {
 
@@ -1333,11 +1333,16 @@ public class CoffeePOS extends JFrame {
 		// generate on screen receipt:
 		ReceiptsPanel p = new ReceiptsPanel();
 		JFrame f = new JFrame();
+		JButton print = new JButton ("Print");
+		JButton email = new JButton("Email");
 		f.setSize(new Dimension(260, 320+16*orders.size()));
 		f.getContentPane().add(p);
 		f.setTitle("Receipt");
 		f.setVisible(true);
 
+		p.add(print);
+		p.add(email);
+	
 		// submit print job:
 		PrinterJob job = PrinterJob.getPrinterJob();
 		job.setPrintable(p);
@@ -1395,7 +1400,7 @@ public class CoffeePOS extends JFrame {
 				// list of ordered items:
 				JLabel[] labelstoo = new JLabel[orders.size()];
 				for (int i = 0; i < orders.size(); i++) {
-					labelstoo[i] = new JLabel("" + (i + 1) + ". " +  orders.get(i).toShortString());
+					labelstoo[i] = new JLabel("" + (i + 1) + ". " +  orders.get(i).toString());
 					labelstoo[i].setFont(f);
 					labelstoo[i].setBounds(10, 110+(i*12), 240, 12);
 					add(labelstoo[i]);
