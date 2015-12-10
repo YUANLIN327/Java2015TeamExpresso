@@ -329,8 +329,7 @@ public class CoffeePOS extends JFrame {
 				txtAmountTendered.setText(tenderedbd.toString());
 				txtChange.setText(changebd.toString());
 				triggerReceipt();               
-                ta.append("Total Amount Due: " + txtAmountDue.getText() + "\n"+ "Amount Tendered: " + txtAmountTendered.getText() + "\n"+
-                 "Change: " + txtChange.getText());
+ 
                 clearOrder();
 
 		    }
@@ -1364,8 +1363,13 @@ public class CoffeePOS extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
-				String report$=ta.getText();
+			  ta.append("Total Amount Due: " + txtAmountDue.getText() + "\n"+ "Amount Tendered: " + txtAmountTendered.getText() + "\n"+
+                   "Change: " + txtChange.getText());
+			  String report$="";
+			  report$ +="Thank you for shopping at iCoffeeShop. We really appreciate your business. \n";
+			  report$ +="Your order total is $"+txtAmountDue.getText()+".\n";
+			  
+			  
               String mailto="John_Carlson@Baylor.edu?SUBJECT=Reciept [iCoffee Shoppe]&BODY=" + report$;
 
               URI uri=null;
