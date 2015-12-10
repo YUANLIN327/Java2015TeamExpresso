@@ -1344,7 +1344,7 @@ public class CoffeePOS extends JFrame {
 		f.setVisible(true);
 		f.add(p,BorderLayout.CENTER);
 		f.add(widgets, BorderLayout.SOUTH);
-
+		widgets.add(emailrec);
 	
 				PrinterJob job = PrinterJob.getPrinterJob();
 				job.setPrintable(p);
@@ -1357,10 +1357,7 @@ public class CoffeePOS extends JFrame {
 				}
 			
 			
-			
 		
-		
-		widgets.add(emailrec);
 	
 		emailrec.addActionListener(new ActionListener(){
 
