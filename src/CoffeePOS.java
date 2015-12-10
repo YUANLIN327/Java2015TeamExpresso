@@ -342,66 +342,69 @@ public class CoffeePOS extends JFrame {
 		btnCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				JFrame checkFrame = new JFrame();
-				checkFrame.setTitle("Check Payment");
+				JFrame checkFrame= new JFrame();
+				checkFrame.setTitle("Check");
 				checkFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				checkFrame.setBounds(100, 100, 349, 392);
-//				JPanel CheckContentPane = new JPanel();
-//				CheckContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-//				CheckContentPane.setLayout(null);
-//				checkFrame.setContentPane(CheckContentPane);
-//				
-//				
-//				JLabel lblNewLabel = new JLabel("Name:");
-//				lblNewLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
-//				CheckContentPane.add(lblNewLabel);
-//				
-//				
-//				JTextField txtCheckName = new JTextField();
-//				txtCheckName.setBounds(126, 82, 190, 26);
-//				checkFrame.getContentPane().add(txtCheckName);
-//				txtCheckName.setColumns(10);
-//				
-//				
-//				JTextField txtDriverLNo = new JTextField();
-//				txtDriverLNo.setBounds(126, 112, 190, 26);
-//				CheckContentPane.add(txtDriverLNo);
-//				txtDriverLNo.setColumns(10);
-//				
-//				
-//				
-//				
-//				JLabel lblNewLabel1 = new JLabel("Check No:");
-//				lblNewLabel.setBounds(39, 87, 75, 16);
-//				getContentPane().add(lblNewLabel);
-//				
-//				
-//				JLabel lblDriversLicense = new JLabel("DL No:");
-//				lblDriversLicense.setBounds(39, 117, 122, 16);
-//				getContentPane().add(lblDriversLicense);
-//				
-//				
-//				JLabel lblCheckNo = new JLabel("Check No:");
-//				lblCheckNo.setBounds(39, 147, 75, 16);
-//				CheckContentPane.add(lblCheckNo);
-//				
-//				
-//				JTextField txtcheckno = new JTextField();
-//				txtcheckno.setBounds(126, 142, 190, 26);
-//				CheckContentPane.add(txtcheckno);
-//				txtcheckno.setColumns(10);
-//				
-//				
-//				JButton btnNewButton = new JButton("Submit");
-//				btnNewButton.setBounds(39, 229, 89, 36);
-//				CheckContentPane.add(btnNewButton);
-//				
-//				
-//				JButton btnCancel = new JButton("Cancel");
-//				btnCancel.setBounds(140, 229, 89, 36);
-//				CheckContentPane.add(btnCancel);
+				checkFrame.setVisible(true);
+				
+				JPanel checkContentPane = new JPanel();
+				checkContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+				checkContentPane.setLayout(null);
+				checkFrame.setContentPane(checkContentPane);
+				
+				JLabel lblNewLabel = new JLabel("Name:");
+				lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+				lblNewLabel.setBounds(35, 27, 104, 18);
+				checkContentPane.add(lblNewLabel);
+				
+				JTextField txtName = new JTextField();
+				txtName.setBounds(35, 48, 263, 29);
+				checkContentPane.add(txtName);
+				txtName.setColumns(10);
+				
+				JLabel lblCardNumber = new JLabel("Check Routing Number:");
+				lblCardNumber.setFont(new Font("Dialog", Font.BOLD, 14));
+				lblCardNumber.setBounds(35, 88, 104, 18);
+				checkContentPane.add(lblCardNumber);
+				
+				JTextField txtCardNum = new JTextField();
+				txtCardNum.setColumns(10);
+				txtCardNum.setBounds(35, 109, 263, 29);
+				checkContentPane.add(txtCardNum);
+				
+				JLabel lblExpiration = new JLabel("DL No:");
+				lblExpiration.setFont(new Font("Dialog", Font.BOLD, 14));
+				lblExpiration.setBounds(35, 159, 160, 18);
+				checkContentPane.add(lblExpiration);
+				
+				
+				
+				JTextField txtSecurityCode = new JTextField();
+				txtSecurityCode.setColumns(10);
+				txtSecurityCode.setBounds(35, 252, 72, 29);
+				checkContentPane.add(txtSecurityCode);
+				
+			
+				
+				JButton btnSubmit = new JButton("Submit");
+				btnSubmit.setBounds(72, 306, 89, 36);
+				checkContentPane.add(btnSubmit);
+				btnSubmit.addActionListener(new ActionListener(){
+	                 @Override
+	                 public void actionPerformed(ActionEvent e) {
+	                	 triggerReceipt();
+	                	 ta.append("This is for credit card");
+	                	 clearOrder();
+	                 }
+				});
+				
+				JButton btnCancel = new JButton("Cancel");
+				btnCancel.setBounds(194, 306, 89, 36);
+				checkContentPane.add(btnCancel);
 			}
-		});
+		});		
+			
 
 		pnlCheckout.add(btnCheck);
 		
