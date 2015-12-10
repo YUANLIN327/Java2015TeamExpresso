@@ -354,7 +354,7 @@ public class CoffeePOS extends JFrame {
 				checkFrame.setContentPane(checkContentPane);
 				
 				JLabel lblNewLabel = new JLabel("Name:");
-				lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+				lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 				lblNewLabel.setBounds(35, 27, 104, 18);
 				checkContentPane.add(lblNewLabel);
 				
@@ -363,9 +363,9 @@ public class CoffeePOS extends JFrame {
 				checkContentPane.add(txtName);
 				txtName.setColumns(10);
 				
-				JLabel lblCardNumber = new JLabel("Check Routing Number:");
-				lblCardNumber.setFont(new Font("Dialog", Font.BOLD, 14));
-				lblCardNumber.setBounds(35, 88, 104, 18);
+				JLabel lblCardNumber = new JLabel("Check Routing No:");
+				lblCardNumber.setFont(new Font("Dialog", Font.BOLD, 12));
+				lblCardNumber.setBounds(35, 88, 150, 18);
 				checkContentPane.add(lblCardNumber);
 				
 				JTextField txtCardNum = new JTextField();
@@ -373,17 +373,17 @@ public class CoffeePOS extends JFrame {
 				txtCardNum.setBounds(35, 109, 263, 29);
 				checkContentPane.add(txtCardNum);
 				
-				JLabel lblExpiration = new JLabel("DL No:");
-				lblExpiration.setFont(new Font("Dialog", Font.BOLD, 14));
-				lblExpiration.setBounds(35, 159, 160, 18);
-				checkContentPane.add(lblExpiration);
+				
+				JLabel lblDLNo = new JLabel("DL No:");
+				lblDLNo.setFont(new Font("Dialog", Font.BOLD, 12));
+				lblDLNo.setBounds(35, 159, 160, 18);
+				checkContentPane.add(lblDLNo);
 				
 				
-				
-				JTextField txtSecurityCode = new JTextField();
-				txtSecurityCode.setColumns(10);
-				txtSecurityCode.setBounds(35, 252, 72, 29);
-				checkContentPane.add(txtSecurityCode);
+				JTextField txtDLNo = new JTextField();
+				txtDLNo.setColumns(10);
+				txtDLNo.setBounds(35, 180, 263, 29);
+				checkContentPane.add(txtDLNo);
 				
 			
 				
