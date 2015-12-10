@@ -1334,26 +1334,68 @@ public class CoffeePOS extends JFrame {
 		ReceiptsPanel p = new ReceiptsPanel();
 		JFrame f = new JFrame();
 		JButton print = new JButton ("Print");
-		JButton email = new JButton("Email");
+		JButton emailrec = new JButton("Email");
+		
 		f.setSize(new Dimension(260, 320+16*orders.size()));
 		f.getContentPane().add(p);
 		f.setTitle("Receipt");
 		f.setVisible(true);
 
-		p.add(print);
-		p.add(email);
-	
-		// submit print job:
-		PrinterJob job = PrinterJob.getPrinterJob();
-		job.setPrintable(p);
-		if (job.printDialog()) {
-			try {
-				job.print();
-			} catch(PrinterException x_x) {
-				System.out.println("Error printing: " + x_x);
+		p.add(print, BorderLayout.NORTH);
+		print.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				// submit print job:
+				ReceiptsPanel p = new ReceiptsPanel();
+				PrinterJob job = PrinterJob.getPrinterJob();
+				job.setPrintable(p);
+				if (job.printDialog()) {
+					try {
+						job.print();
+					} catch(PrinterException x_x) {
+						System.out.println("Error printing: " + x_x);
+					}
+				}
 			}
-		}
-	}
+			
+			
+			
+		});
+		
+		p.add(emailrec,BorderLayout.NORTH);
+	
+		emailrec.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				String report$=ta.getText();
+              String mailto="Claudia_zamudio@baylor.edu?SUBJECT=Reciept [iCoffee Shoppe]&BODY=" + report$;
+
+              URI uri=null;
+
+              try{
+                  uri=new URI("mailto", mailto, null);
+                  try {
+                      desktop.mail(uri);
+                  } catch (IOException e1) {
+                      // TODO Auto-generated catch block
+                      e1.printStackTrace();
+                  }
+              }catch (URISyntaxException e1){
+                  e1.printStackTrace();
+
+              }
+          }
+
+      });
+}
+			
+	
+	
 
 	
 
