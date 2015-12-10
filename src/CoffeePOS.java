@@ -1335,13 +1335,15 @@ public class CoffeePOS extends JFrame {
 		JFrame f = new JFrame();
 		JButton print = new JButton ("Print");
 		JButton emailrec = new JButton("Email");
-		
+		JPanel widgets = new JPanel();
 		f.setSize(new Dimension(260, 320+16*orders.size()));
 		f.getContentPane().add(p);
 		f.setTitle("Receipt");
 		f.setVisible(true);
+		f.add(p,BorderLayout.CENTER);
+		f.add(widgets, BorderLayout.SOUTH);
 
-		p.add(print, BorderLayout.NORTH);
+		widgets.add(print);
 		print.addActionListener(new ActionListener(){
 
 			@Override
@@ -1364,7 +1366,7 @@ public class CoffeePOS extends JFrame {
 			
 		});
 		
-		p.add(emailrec,BorderLayout.NORTH);
+		widgets.add(emailrec);
 	
 		emailrec.addActionListener(new ActionListener(){
 
@@ -1373,7 +1375,7 @@ public class CoffeePOS extends JFrame {
 				// TODO Auto-generated method stub
 				
 				String report$=ta.getText();
-              String mailto="Claudia_zamudio@baylor.edu?SUBJECT=Reciept [iCoffee Shoppe]&BODY=" + report$;
+              String mailto="John_Carlson@Baylor.edu?SUBJECT=Reciept [iCoffee Shoppe]&BODY=" + report$;
 
               URI uri=null;
 
@@ -1393,21 +1395,11 @@ public class CoffeePOS extends JFrame {
 
       });
 }
-			
-	
-	
-
-	
-
-	
 	
 		@SuppressWarnings("serial")
 		class ReceiptsPanel extends JPanel implements Printable {
 
 			Font f = new Font("Helvetica", Font.PLAIN, 10);
-			//Image receiptIMG = Toolkit.getDefaultToolkit().getImage("ye-olde-receipt.png");
-			//ImageIcon receiptIMGICON = new ImageIcon(receiptIMG.getScaledInstance(240, 60, Image.SCALE_SMOOTH));
-			//BigDecimal total = totalPrice.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
 			/**
 			 * paintComponent() contains the code to draw the receipt:
