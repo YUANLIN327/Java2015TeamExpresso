@@ -53,7 +53,7 @@ import javax.swing.border.EmptyBorder;
 
 
 public class CoffeePOS extends JFrame {
-	//lin change
+
 	static CoffeePOS frame;
 	private JPanel contentPane;
 	BufferedImage buttonIcon1 = ImageIO.read(new File("Tea.png"));	
@@ -1333,11 +1333,16 @@ public class CoffeePOS extends JFrame {
 		// generate on screen receipt:
 		ReceiptsPanel p = new ReceiptsPanel();
 		JFrame f = new JFrame();
+		JButton print = new JButton ("Print");
+		JButton email = new JButton("Email");
 		f.setSize(new Dimension(260, 320+16*orders.size()));
 		f.getContentPane().add(p);
 		f.setTitle("Receipt");
 		f.setVisible(true);
 
+		p.add(print);
+		p.add(email);
+	
 		// submit print job:
 		PrinterJob job = PrinterJob.getPrinterJob();
 		job.setPrintable(p);
@@ -1361,13 +1366,14 @@ public class CoffeePOS extends JFrame {
 			//Image receiptIMG = Toolkit.getDefaultToolkit().getImage("ye-olde-receipt.png");
 			//ImageIcon receiptIMGICON = new ImageIcon(receiptIMG.getScaledInstance(240, 60, Image.SCALE_SMOOTH));
 			//BigDecimal total = totalPrice.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-
+			Order currOrder = orders.get(orders.size()-1);
+			
 			/**
 			 * paintComponent() contains the code to draw the receipt:
 			 */
 			public void paintComponent(Graphics graphics) {
 				super.paintComponent(graphics);
-				Order currOrder = orders.get(orders.size()-1);
+				
 				this.setLayout(null);
 
 				// make it smooth:
@@ -1392,13 +1398,11 @@ public class CoffeePOS extends JFrame {
 						+ " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 66, 90);
 
 				
-		
+				// list of ordered items:
+			
 				for (int i = 0; i < currOrder.orderitems.size(); i++) {
-					g2d.drawString(currOrder.orderitems.get(i).name,30,120+15*i);
-//					labelstoo[i] = new JLabel("" + (i + 1) + ". " +  orders.get(i).toShortString());
-//					labelstoo[i].setFont(f);
-//					labelstoo[i].setBounds(10, 110+(i*12), 240, 12);
-//					add(labelstoo[i]);
+					g2d.drawString( currOrder.orderitems.get(i).name, 70, 120+15*i);
+					
 				}
 
 				
