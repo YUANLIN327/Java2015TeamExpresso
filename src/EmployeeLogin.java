@@ -117,6 +117,7 @@ public class EmployeeLogin {
 						System.out.println("Run after isoverriding");
 						if (isManager){
 							coffeeapp.isManager=true;
+							coffeeapp.currentOrder=coffeeapp.orders.get(coffeeapp.orders.size()-1);
 							System.out.println("manager");
 							JOptionPane.showMessageDialog(null,"Welcome Manager Chen");
 						}

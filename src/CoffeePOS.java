@@ -545,6 +545,71 @@ public class CoffeePOS extends JFrame {
 
 		//giftcard button
 		JButton btnGiftCard = new JButton(new ImageIcon(btnIconGiftCard));		
+		btnGiftCard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("run 1");
+				connection = sqliteConnection.dbConnector();
+				int counter=0;
+				String gift$ = JOptionPane.showInputDialog("Please enter your 5 digits giftcard#");			
+			
+				try {
+					System.out.println("run 2");
+					String query = "Select * from Customer where GiftCard=?";
+					PreparedStatement pst = connection.prepareStatement(query);
+					pst.setString(1, gift$);
+					ResultSet rs = pst.executeQuery();
+					System.out.println("run 3");
+					while(rs.next()){	
+						System.out.println("run 4");
+						customer = new Customer();
+						customer.GiftCardID=rs.getString("GiftCard");
+						customer.name=rs.getString("Name");
+						customer.point=rs.getInt("Points");
+						counter++;
+					}
+					if(counter>=1){
+						JFrame giftframe = new JFrame();
+						giftframe.setBounds(100, 100, 315, 222);
+						giftframe.setVisible(true);
+						JPanel giftcontentPane = new JPanel();
+						giftcontentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+						giftcontentPane.setLayout(null);
+						giftframe.setContentPane(giftcontentPane);
+						JLabel lblNewLabel = new JLabel("Customer Name:");
+						lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+						lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+						lblNewLabel.setBounds(10, 50, 138, 34);
+						giftcontentPane.add(lblNewLabel);
+						
+						JLabel lblCustomerName = new JLabel(customer.name);
+						lblCustomerName.setHorizontalAlignment(SwingConstants.LEFT);
+						lblCustomerName.setFont(new Font("Dialog", Font.PLAIN, 14));
+						lblCustomerName.setBounds(175, 50, 138, 34);
+						giftcontentPane.add(lblCustomerName);
+						
+						JLabel lblPointsAvailable = new JLabel("Points Available:");
+						lblPointsAvailable.setHorizontalAlignment(SwingConstants.RIGHT);
+						lblPointsAvailable.setFont(new Font("Dialog", Font.BOLD, 14));
+						lblPointsAvailable.setBounds(10, 110, 138, 34);
+						giftcontentPane.add(lblPointsAvailable);
+						
+						JLabel lblPoint = new JLabel(""+customer.point);
+						lblPoint.setHorizontalAlignment(SwingConstants.LEFT);
+						lblPoint.setFont(new Font("Dialog", Font.PLAIN, 14));
+						lblPoint.setBounds(175, 110, 138, 34);
+						giftcontentPane.add(lblPoint);
+					}
+					System.out.println("run 5");
+					rs.close();
+					pst.close();
+					connection.close();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		btnGiftCard.setText("Gift Card");
 		btnGiftCard.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		btnGiftCard.setBounds(472, 472, 129, 63);
@@ -1312,17 +1377,17 @@ public class CoffeePOS extends JFrame {
 
 	public void addOrderItem(String itemname) {
 
-		connection = sqliteConnection.dbConnector();
+//		connection = sqliteConnection.dbConnector();
 		OrderItem oi = new OrderItem(itemname, items.get(itemname));
-
+		System.out.println(oi.name);
 		if (isOrderEmpty) {
-			Order newOrder = new Order();
-			orders.add(newOrder);
+			currentOrder = new Order();
+			orders.add(currentOrder);
 			isOrderEmpty = false;
-			newOrder.orderitems.add(oi);
+			currentOrder.orderitems.add(oi);
 			oidata.addElement(oi);
-			System.out.println(newOrder.getSubtotal());
-			updateitemlabel(newOrder);
+			System.out.println(currentOrder.getSubtotal());
+			updateitemlabel(currentOrder);
 
 		} else {
 			currentOrder = orders.get(orders.size() - 1);
@@ -1375,7 +1440,37 @@ public class CoffeePOS extends JFrame {
 	}
 
 	private void triggerReceipt() {
-
+		
+		if(customer!=null){
+			System.out.println("not null");
+			connection = sqliteConnection.dbConnector();
+			int counter=0;	
+		
+			try {
+				
+				String querysearch = "Select * from Customer where GiftCard=?";
+				PreparedStatement pst = connection.prepareStatement(querysearch);
+				pst.setString(1,customer.GiftCardID);
+				System.out.println(customer.GiftCardID);
+				ResultSet rs = pst.executeQuery();
+				System.out.println("execute querysearch");
+				while(rs.next()){	
+					System.out.println("before update");
+					String queryupdate = "Update Customer Set Points=?";
+					PreparedStatement pstupdate = connection.prepareStatement(queryupdate);
+					pstupdate.setString(1,"800");
+					pstupdate.executeQuery();
+					counter++;
+					System.out.println("after update");
+				}
+				if(counter>=1){
+					System.out.println("new points: "+rs.getInt("Points"));
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 		// generate on screen receipt:
 		final ReceiptsPanel p = new ReceiptsPanel();
 		JFrame f = new JFrame();
@@ -1390,7 +1485,7 @@ public class CoffeePOS extends JFrame {
 		f.getContentPane().add(widgets, BorderLayout.SOUTH);
 		widgets.add(emailrec);
 		widgets.add(print);
-
+		
 		print.addActionListener(new ActionListener() {
 
 			@Override
@@ -1447,9 +1542,9 @@ public class CoffeePOS extends JFrame {
 
 		// Declaring the font of the Receipt and the Logo Image for the Receipt
 		Font f = new Font("Helvetica", Font.PLAIN, 10);
-		Image receiptIMG = Toolkit.getDefaultToolkit().getImage("logo.png");
-		ImageIcon receiptIMGICON = new ImageIcon(receiptIMG.getScaledInstance(
-				115, 60, Image.SCALE_SMOOTH));
+//		Image receiptIMG = Toolkit.getDefaultToolkit().getImage("logo.png");
+//		ImageIcon receiptIMGICON = new ImageIcon(receiptIMG.getScaledInstance(
+//				115, 60, Image.SCALE_SMOOTH));
 
 		// Contains the code to draw the receipt
 		public void paintComponent(Graphics graphics) {
@@ -1463,10 +1558,12 @@ public class CoffeePOS extends JFrame {
 					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 			g2d.setRenderingHints(hints);
 
-			JLabel lblTitle = new JLabel();
-			lblTitle.setIcon(receiptIMGICON);
-			lblTitle.setBounds(65, 10, 115, 60);
-			add(lblTitle);
+					
+			JButton btnLogo = new JButton(new ImageIcon(buttonIcon21));
+			btnLogo.setBounds(65, 10, 115, 60);
+			btnLogo.setEnabled(false);
+			btnLogo.setBackground(Color.WHITE);
+			add(btnLogo);
 
 			// date/time stamp:
 
@@ -1491,10 +1588,11 @@ public class CoffeePOS extends JFrame {
 
 			}
 
-			// Displaying the total:
-			g2d.setFont(new Font("Helvetica", Font.PLAIN, 18));
-			g2d.drawString("Total: " + currentOrder.getTotal(), 74,
-					getHeight() - 35);
+		     // Displaying the total:
+            g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
+            g2d.drawString("Subtotal:" + currentOrder.getSubtotal(),74, getHeight()-60);
+            g2d.drawString("Discount:" + currentOrder.getDiscount(),  74, getHeight()-50);
+            g2d.drawString("Total: " + currentOrder.getTotal(), 74, getHeight()-35);
 
 			// slogan:
 			g2d.setFont(f.deriveFont(Font.ITALIC, 15));
