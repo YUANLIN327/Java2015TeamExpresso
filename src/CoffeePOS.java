@@ -1162,19 +1162,22 @@ public class CoffeePOS extends JFrame {
 					if (!isManager) {
 						int dialogResult = JOptionPane
 								.showConfirmDialog(null,
-										"Do you want to log out and re-login as a manager?");
+										"Acess denied. You are not a manager. \n"
+										+ "Do you want to log out and re-login as a manager?");
 						if (dialogResult == JOptionPane.YES_OPTION) {
 							EmployeeLogin emapp = new EmployeeLogin();
 							emapp.isOveriding = true;
 							emapp.items = currentOrder.orderitems;
 							emapp.sel = sel;
+							emapp.passOrder=currentOrder;
 							emapp.loginFrame.setVisible(true);
 							frame.dispose();
 						}
 					} else {
-						currentOrder = orders.get(orders.size() - 1);
+						System.out.println("before itemlist");
 						OrderItem curroi = (OrderItem) itemlist
 								.getSelectedValue();
+						System.out.println("after itemlist");
 						String newprice$ = JOptionPane
 								.showInputDialog("Please enter the new price");
 						curroi.unitprice = Double.parseDouble(newprice$);
@@ -1198,9 +1201,8 @@ public class CoffeePOS extends JFrame {
 		btnSubmitOrder.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		btnSubmitOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!isOrderEmpty) {
+				if (currentOrder!=null) {
 					c1.show(pnlContainer, "Checkout");
-					currentOrder = orders.get(orders.size() - 1);
 					txtAmountDue.setText("" + currentOrder.getTotal());
 				} else {
 
@@ -1420,7 +1422,7 @@ public class CoffeePOS extends JFrame {
 		ta.append("------------------------------------------------------------\n");
 	}
 
-	private void updateitemlabel(Order currOrder) {
+	public void updateitemlabel(Order currOrder) {
 		System.out.println("updateitemlabel runned");
 		lblDiscount.setText("($" + currentOrder.getDiscount() + ")");
 		lblSubTotal.setText("$" + currentOrder.getSubtotal());
@@ -1431,7 +1433,7 @@ public class CoffeePOS extends JFrame {
 
 	private void clearOrder() {
 		oidata.removeAllElements();
-		isOrderEmpty = true;
+		currentOrder=null;
 		txtAmountDue.setText("");
 		txtAmountTendered.setText("");
 		txtChange.setText("");
