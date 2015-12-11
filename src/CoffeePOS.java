@@ -406,6 +406,11 @@ public class CoffeePOS extends JFrame {
 				JButton btnCancel = new JButton("Cancel");
 				btnCancel.setBounds(194, 306, 89, 36);
 				checkContentPane.add(btnCancel);
+//				if(e.getSource()==btnCancel){
+//					
+//					       frameToClose.dispose();
+//					
+//				}
 			}
 		});		
 			
@@ -1332,19 +1337,24 @@ public class CoffeePOS extends JFrame {
 	private void triggerReceipt() {
 		
 		// generate on screen receipt:
-		ReceiptsPanel p = new ReceiptsPanel();
+		final ReceiptsPanel p = new ReceiptsPanel();
 		JFrame f = new JFrame();
 		JButton print = new JButton ("Print");
 		JButton emailrec = new JButton("Email");
 		JPanel widgets = new JPanel();
-		f.setSize(new Dimension(260, 320+16*orders.size()));
+		f.setSize(new Dimension(260, 390+20*orders.size()));
 		f.getContentPane().add(p);
 		f.setTitle("Receipt");
 		f.setVisible(true);
 		f.add(p,BorderLayout.CENTER);
 		f.add(widgets, BorderLayout.SOUTH);
 		widgets.add(emailrec);
-	
+		widgets.add(print);
+		
+		print.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				PrinterJob job = PrinterJob.getPrinterJob();
 				job.setPrintable(p);
 				if (job.printDialog()) {
@@ -1354,10 +1364,9 @@ public class CoffeePOS extends JFrame {
 						System.out.println("Error printing: " + x_x);
 					}
 				}
+			}
+		});
 			
-			
-		
-	
 		emailrec.addActionListener(new ActionListener(){
 
 			@Override
@@ -1417,7 +1426,7 @@ public class CoffeePOS extends JFrame {
 
 				JLabel lblTitle = new JLabel();
 				lblTitle.setIcon(receiptIMGICON);
-				lblTitle.setBounds(65, 0, 115, 60);
+				lblTitle.setBounds(65, 10, 115, 60);
 				add(lblTitle);
 				
 				
@@ -1425,31 +1434,31 @@ public class CoffeePOS extends JFrame {
 				
 				Calendar cal = new GregorianCalendar();
 				g2d.setColor(Color.BLACK);
-				g2d.setFont(new Font("Helvetica", Font.BOLD, 12));
-				g2d.drawString(" iCoffee Shoppe Reciept", 52, 70);
+				g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
+				g2d.drawString(" iCoffee Shoppe Reciept", 58, 95);
 				g2d.drawString((cal.get(Calendar.MONTH) + 1) 
 						+ "/" + cal.get(Calendar.DAY_OF_MONTH) 
 						+ "/" + cal.get(Calendar.YEAR)
 						+ "  " + cal.get(Calendar.HOUR_OF_DAY) 
 						+ ":" + cal.get(Calendar.MINUTE) 
-						+ " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 66, 90);
+						+ " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 66, 110);
 
 				
 				// Show the list of items ordered
 			    Order currOrder = orders.get(orders.size()-1);
                 for (int i = 0; i < currOrder.orderitems.size(); i++) {
-                    g2d.drawString( currOrder.orderitems.get(i).name, 70, 120+15*i);
+                    g2d.drawString( currOrder.orderitems.get(i).name, 70, 135+15*i);
                    
                 }
 				
 				// Displaying the total:
 				g2d.setFont(new Font("Helvetica", Font.PLAIN, 18));
-				g2d.drawString("Total: " + txtAmountDue.getText(), 74, getHeight()-55);
+				g2d.drawString("Total: " + currOrder.getTotal(), 74, getHeight()-35);
 
 				
 				// slogan:
 				g2d.setFont(f.deriveFont(Font.ITALIC, 15));
-				g2d.drawString("Have a blessed day!", 47, getHeight()-30);
+				g2d.drawString("Have a blessed day!", 47, getHeight()-20);
 
 			}
 
