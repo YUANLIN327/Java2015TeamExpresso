@@ -106,6 +106,7 @@ public class CoffeePOS extends JFrame {
 	JLabel lblTax;
 	JLabel lblTotal;
 	JLabel lblWelcome;
+	JButton btnOverridePrice;
     JFrame Receipt = new JFrame();
     JPanel categoryContainer;
     JPanel pnlContainer;
@@ -119,7 +120,8 @@ public class CoffeePOS extends JFrame {
     String CashAmt;
     String CurrentEmployee="";
     private JTextField txtSearch;
-
+    Order currentOrder=null;
+    
     
     Connection connection = null;
 	/**
@@ -159,7 +161,7 @@ public class CoffeePOS extends JFrame {
 		setContentPane(contentPane);
 		
 		JPanel pnlRibbon = new JPanel();
-		pnlRibbon.setBounds(0, 14, 1090, 77);
+		pnlRibbon.setBounds(0, 14, 1090, 75);
 		pnlRibbon.setLayout(null);
 		pnlRibbon.setBackground(new Color(128, 0, 0));
 		contentPane.add(pnlRibbon);
@@ -262,7 +264,7 @@ public class CoffeePOS extends JFrame {
 		//add container panel for menu and check out		
 		pnlContainer = new JPanel();
 		pnlContainer.setBackground(new Color(100, 149, 237));
-		pnlContainer.setBounds(390, 90, 700, 589);
+		pnlContainer.setBounds(390, 92, 700, 587);
 		//apply the card layout 
 		pnlContainer.setLayout(c1);
 		contentPane.add(pnlContainer);
@@ -349,7 +351,6 @@ public class CoffeePOS extends JFrame {
 				
 				JFrame checkFrame= new JFrame();
 				checkFrame.setTitle("Check");
-				checkFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				checkFrame.setBounds(100, 100, 349, 392);
 				checkFrame.setVisible(true);
 				
@@ -426,11 +427,11 @@ public class CoffeePOS extends JFrame {
 				boolean isvalid =couponcode.containsKey(input$);
 				if (isvalid){
 					NumberFormat nf2 = NumberFormat.getPercentInstance(Locale.US);
-					Order currOrder = orders.get(orders.size()-1);
+					currentOrder = orders.get(orders.size()-1);
 					double discount =  couponcode.get(input$);
-					currOrder.coupon = discount;
-					updateitemlabel(currOrder);
-					txtAmountDue.setText(""+currOrder.getTotal());
+					currentOrder.coupon = discount;
+					updateitemlabel(currentOrder);
+					txtAmountDue.setText(""+currentOrder.getTotal());
 					JOptionPane.showMessageDialog(null, "Congratulations! A "+nf2.format(discount)+ " dicount has been applied!");
 				}
 				else{
@@ -465,7 +466,6 @@ public class CoffeePOS extends JFrame {
 				
 				JFrame creditFrame= new JFrame();
 				creditFrame.setTitle("Credit/Debit");
-				creditFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				creditFrame.setBounds(100, 100, 349, 392);
 				creditFrame.setVisible(true);
 				
@@ -1010,7 +1010,7 @@ public class CoffeePOS extends JFrame {
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int sel = itemlist.getSelectedIndex();
-				Order currorder = orders.get(orders.size()-1);
+				currentOrder = orders.get(orders.size()-1);
 				OrderItem curroi = (OrderItem)itemlist.getSelectedValue();
 				
 				if (sel>-1){
@@ -1050,20 +1050,33 @@ public class CoffeePOS extends JFrame {
 		contentPane.add(btnEdit);
 
 		
-		JButton btnOverridePrice = new JButton("Override Price");
+		btnOverridePrice = new JButton("Override Price");
 		btnOverridePrice.setFont(new Font("Dialog", Font.PLAIN, 12));
 		btnOverridePrice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 //				if(isManager){
 				int sel = itemlist.getSelectedIndex();
 				if (sel>-1){
-					Order currorder = orders.get(orders.size()-1);
-					OrderItem curroi = (OrderItem)itemlist.getSelectedValue();
-					String newprice$ = JOptionPane.showInputDialog("Please enter the new price");
-					curroi.unitprice = Double.parseDouble(newprice$);
-					oidata.remove(sel);
-					oidata.insertElementAt(curroi, sel);	
-					updateitemlabel(currorder);
+					if(!isManager){
+						int dialogResult= JOptionPane.showConfirmDialog(null, "Do you want to log out and re-login as a manager?");
+						if(dialogResult == JOptionPane.YES_OPTION){
+							EmployeeLogin emapp = new EmployeeLogin();
+							emapp.isOveriding=true;
+							emapp.items=currentOrder.orderitems;
+							emapp.sel=sel;
+							emapp.loginFrame.setVisible(true);
+							frame.dispose();
+								}
+					}
+					else{
+						currentOrder = orders.get(orders.size()-1);
+						OrderItem curroi = (OrderItem)itemlist.getSelectedValue();
+						String newprice$ = JOptionPane.showInputDialog("Please enter the new price");
+						curroi.unitprice = Double.parseDouble(newprice$);
+						oidata.remove(sel);
+						oidata.insertElementAt(curroi, sel);	
+						updateitemlabel(currentOrder);
+					}
 							
 				}
 				else {
@@ -1082,8 +1095,8 @@ public class CoffeePOS extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (!isOrderEmpty){
 					c1.show(pnlContainer, "Checkout");
-					Order currOrder = orders.get(orders.size()-1);
-					txtAmountDue.setText(""+currOrder.getTotal());
+					currentOrder = orders.get(orders.size()-1);
+					txtAmountDue.setText(""+currentOrder.getTotal());
 				}
 				else {
 					
@@ -1177,11 +1190,11 @@ public class CoffeePOS extends JFrame {
 		btnRemove.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				int s = itemlist.getSelectedIndex();
-				Order currOrder = orders.get(orders.size()-1);
+				currentOrder = orders.get(orders.size()-1);
 				if(s != -1){
-					currOrder.orderitems.remove(s);
+					currentOrder.orderitems.remove(s);
 					oidata.remove(s);
-					updateitemlabel(currOrder);
+					updateitemlabel(currentOrder);
 					
 				}
 				
@@ -1284,11 +1297,11 @@ public class CoffeePOS extends JFrame {
 			
 		}
 		else {
-			Order currOrder = orders.get(orders.size()-1);
+			currentOrder = orders.get(orders.size()-1);
 			boolean isrepeat=false;
 			int position = 0;
-			for (int i = 0;i<currOrder.orderitems.size();++i){
-				if (currOrder.orderitems.get(i).name==itemname){
+			for (int i = 0;i<currentOrder.orderitems.size();++i){
+				if (currentOrder.orderitems.get(i).name==itemname){
 					isrepeat = true;
 					position=i;
 					break;					
@@ -1296,16 +1309,16 @@ public class CoffeePOS extends JFrame {
 			}
 			
 			if(isrepeat){
-				OrderItem selectedoi = currOrder.orderitems.get(position);
+				OrderItem selectedoi = currentOrder.orderitems.get(position);
 				selectedoi.quantity++;
 				oidata.remove(position);
 				oidata.insertElementAt(selectedoi, position);	
-				updateitemlabel(currOrder);
+				updateitemlabel(currentOrder);
 			}
 			else {
-				currOrder.orderitems.add(oi);
+				currentOrder.orderitems.add(oi);
 				oidata.addElement(oi);
-				updateitemlabel(currOrder);
+				updateitemlabel(currentOrder);
 			}
 		}	
 		
@@ -1317,10 +1330,10 @@ public class CoffeePOS extends JFrame {
 
 	private void updateitemlabel(Order currOrder) {
 		System.out.println("updateitemlabel runned");
-		lblDiscount.setText("($"+currOrder.getDiscount()+")");
-		lblSubTotal.setText("$"+currOrder.getSubtotal());
-		lblTax.setText("$"+currOrder.getTax());
-		lblTotal.setText("$"+currOrder.getTotal());
+		lblDiscount.setText("($"+currentOrder.getDiscount()+")");
+		lblSubTotal.setText("$"+currentOrder.getSubtotal());
+		lblTax.setText("$"+currentOrder.getTax());
+		lblTotal.setText("$"+currentOrder.getTotal());
 	
 
 	}
@@ -1347,8 +1360,8 @@ public class CoffeePOS extends JFrame {
 		f.getContentPane().add(p);
 		f.setTitle("Receipt");
 		f.setVisible(true);
-		f.add(p,BorderLayout.CENTER);
-		f.add(widgets, BorderLayout.SOUTH);
+		f.getContentPane().add(p,BorderLayout.CENTER);
+		f.getContentPane().add(widgets, BorderLayout.SOUTH);
 		widgets.add(emailrec);
 		widgets.add(print);
 		
@@ -1446,15 +1459,15 @@ public class CoffeePOS extends JFrame {
 
 				
 				// Show the list of items ordered
-			    Order currOrder = orders.get(orders.size()-1);
-                for (int i = 0; i < currOrder.orderitems.size(); i++) {
-                    g2d.drawString( currOrder.orderitems.get(i).name, 70, 135+15*i);
+			    currentOrder = orders.get(orders.size()-1);
+                for (int i = 0; i < currentOrder.orderitems.size(); i++) {
+                    g2d.drawString( currentOrder.orderitems.get(i).name, 70, 135+15*i);
                    
                 }
 				
 				// Displaying the total:
 				g2d.setFont(new Font("Helvetica", Font.PLAIN, 18));
-				g2d.drawString("Total: " + currOrder.getTotal(), 74, getHeight()-35);
+				g2d.drawString("Total: " + currentOrder.getTotal(), 74, getHeight()-35);
 
 				
 				// slogan:

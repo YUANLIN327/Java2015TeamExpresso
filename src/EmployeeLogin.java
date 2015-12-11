@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +22,9 @@ public class EmployeeLogin {
 	JFrame loginFrame;
 	private JTextField txtUserName;
 	private JPasswordField pswPassword;
+	boolean isOveriding=true;
+	ArrayList<OrderItem> items=null;
+	int sel=0;
 
 	/**
 	 * Launch the application.
@@ -83,6 +87,7 @@ public class EmployeeLogin {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String name$="";
+				boolean isManager = false;
 				try{
 					String query = "Select * from EmployeeInfo where username=? and password=?";
 					PreparedStatement pst=connection.prepareStatement(query);
@@ -93,13 +98,31 @@ public class EmployeeLogin {
 					while(rs.next()){
 						counter++;
 						name$=rs.getString("name");
+						isManager = rs.getBoolean("Is_Manager");
 					}
-					if(counter>=1){
-						
-						JOptionPane.showMessageDialog(null,"Login Successfully");
+					if(counter>=1){						
+						System.out.println("Run before ismanager");
 						CoffeePOS coffeeapp = new CoffeePOS();
 						coffeeapp.lblWelcome.setText( "Welcome "+ name$);
 						coffeeapp.setVisible(true);
+						System.out.println("Run before isfirstimelogin");
+						if (isOveriding){
+							
+							for (OrderItem oi :items){
+								coffeeapp.oidata.addElement(oi);
+								coffeeapp.itemlist.setSelectedIndex(sel);
+							}
+						}
+					
+						if (isManager){
+							coffeeapp.isManager=true;
+							System.out.println("manager");
+							JOptionPane.showMessageDialog(null,"Welcome Manager Chen");
+						}
+						else{
+							coffeeapp.isManager=false;							
+						}
+						System.out.println("Run after ismanager");
 						loginFrame.dispose();
 					
 					}
