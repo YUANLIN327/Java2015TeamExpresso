@@ -666,11 +666,11 @@ public class CoffeePOS extends JFrame {
 		lblCheck.setBounds(482, 322, 104, 16);
 		pnlCheckout.add(lblCheck);
 
-		JLabel lblCoupon = new JLabel("Coupon");
+		JLabel lblCoupon = new JLabel("Coupon/");
 		lblCoupon.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCoupon.setForeground(new Color(139, 0, 0));
 		lblCoupon.setFont(new Font("Dialog", Font.PLAIN, 16));
-		lblCoupon.setBounds(482, 428, 104, 16);
+		lblCoupon.setBounds(482, 428, 101, 16);
 		pnlCheckout.add(lblCoupon);
 		
 		JLabel lblGiftcard = new JLabel("GiftCard");
@@ -679,6 +679,13 @@ public class CoffeePOS extends JFrame {
 		lblGiftcard.setFont(new Font("Dialog", Font.PLAIN, 16));
 		lblGiftcard.setBounds(482, 546, 104, 16);
 		pnlCheckout.add(lblGiftcard);
+		
+		JLabel lblEmployeeDiscount = new JLabel("Employee Discount");
+		lblEmployeeDiscount.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEmployeeDiscount.setForeground(new Color(139, 0, 0));
+		lblEmployeeDiscount.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblEmployeeDiscount.setBounds(472, 445, 143, 16);
+		pnlCheckout.add(lblEmployeeDiscount);
 
 		c1.show(pnlContainer, "Menu");
 
@@ -1162,7 +1169,7 @@ public class CoffeePOS extends JFrame {
 					if (!isManager) {
 						int dialogResult = JOptionPane
 								.showConfirmDialog(null,
-										"Acess denied. You are not a manager. \n"
+										"Access denied. You are not a manager. \n"
 										+ "Do you want to log out and re-login as a manager?");
 						if (dialogResult == JOptionPane.YES_OPTION) {
 							EmployeeLogin emapp = new EmployeeLogin();
