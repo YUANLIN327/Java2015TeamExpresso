@@ -20,9 +20,9 @@ import javax.swing.SwingConstants;
 public class EmployeeLogin {
 
 	JFrame loginFrame;
-	private JTextField txtUserName;
-	private JPasswordField pswPassword;
-	boolean isOveriding=true;
+	JTextField txtUserName;
+	JPasswordField pswPassword;
+	boolean isOveriding=false;
 	ArrayList<OrderItem> items=null;
 	int sel=0;
 
@@ -99,6 +99,7 @@ public class EmployeeLogin {
 						counter++;
 						name$=rs.getString("name");
 						isManager = rs.getBoolean("Is_Manager");
+						System.out.println(isManager);
 					}
 					if(counter>=1){						
 						System.out.println("Run before ismanager");
@@ -113,7 +114,7 @@ public class EmployeeLogin {
 								coffeeapp.itemlist.setSelectedIndex(sel);
 							}
 						}
-					
+						System.out.println("Run after isoverriding");
 						if (isManager){
 							coffeeapp.isManager=true;
 							System.out.println("manager");
@@ -122,7 +123,9 @@ public class EmployeeLogin {
 						else{
 							coffeeapp.isManager=false;							
 						}
+						
 						System.out.println("Run after ismanager");
+						
 						loginFrame.dispose();
 					
 					}

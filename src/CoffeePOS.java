@@ -18,16 +18,15 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -121,6 +120,7 @@ public class CoffeePOS extends JFrame {
     String CurrentEmployee="";
     private JTextField txtSearch;
     Order currentOrder=null;
+    Customer customer=null;
     
     
     Connection connection = null;
@@ -188,17 +188,18 @@ public class CoffeePOS extends JFrame {
 		btnGroup.add(rdbDinein);
 		btnGroup.add(rdbTakehome);
 		
-		JButton btnNewButton = new JButton("Log out");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnLogout = new JButton("Log out");
+		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				EmployeeLogin emp = new EmployeeLogin();				
 				emp.loginFrame.setVisible(true);
 				frame.dispose();
 				
+				
 			}
 		});
-		btnNewButton.setBounds(216, 41, 144, 29);
-		pnlRibbon.add(btnNewButton);
+		btnLogout.setBounds(216, 41, 144, 29);
+		pnlRibbon.add(btnLogout);
 		
 		txtSearch = new JTextField();
 		txtSearch.setBounds(801, 24, 183, 33);
@@ -208,7 +209,7 @@ public class CoffeePOS extends JFrame {
 		lblWelcome = new JLabel("Welcome");
 		lblWelcome.setForeground(Color.WHITE);
 		lblWelcome.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblWelcome.setBounds(206, 13, 201, 17);
+		lblWelcome.setBounds(214, 13, 201, 17);
 		pnlRibbon.add(lblWelcome);
 		
 		JButton btnSearch = new JButton("Search");
@@ -450,6 +451,69 @@ public class CoffeePOS extends JFrame {
 
 		//giftcard button
 		JButton btnGiftCard = new JButton(new ImageIcon(btnIconGiftCard));		
+		btnGiftCard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				connection=sqliteConnection.dbConnector();
+				String giftcard$=JOptionPane.showInputDialog("Please enter your 5 digits Giftcard Number");
+				String query = "Select * from Customer where CusomterID="+giftcard$;
+				int counter=0;
+				try {
+					Statement stmt = connection.createStatement();
+					ResultSet rs=stmt.executeQuery(query);
+					while(rs.next()){
+						counter++;
+						
+					}
+					if(counter>=1){
+						customer = new Customer();
+						customer.name=rs.getString("Name");
+						customer.GiftCardID=giftcard$;
+						customer.point=rs.getInt("Points");
+						
+						JFrame giftFrame =new JFrame();
+						giftFrame.setBounds(100, 100, 315, 222);
+						JPanel giftcontentPane = new JPanel();
+						giftcontentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+						giftcontentPane.setLayout(null);
+						setContentPane(giftcontentPane);
+						
+						JLabel lblNewLabel = new JLabel("Customer Name:");
+						lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+						lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+						lblNewLabel.setBounds(10, 50, 138, 34);
+						giftcontentPane.add(lblNewLabel);
+						
+						JLabel lblCustomerName = new JLabel(customer.name);
+						lblCustomerName.setHorizontalAlignment(SwingConstants.LEFT);
+						lblCustomerName.setFont(new Font("Dialog", Font.PLAIN, 14));
+						lblCustomerName.setBounds(175, 50, 138, 34);
+						giftcontentPane.add(lblCustomerName);
+						
+						JLabel lblPointsAvailable = new JLabel("Points Available:");
+						lblPointsAvailable.setHorizontalAlignment(SwingConstants.RIGHT);
+						lblPointsAvailable.setFont(new Font("Dialog", Font.BOLD, 14));
+						lblPointsAvailable.setBounds(10, 110, 138, 34);
+						giftcontentPane.add(lblPointsAvailable);
+						
+						JLabel lblPoint = new JLabel(""+customer.point);
+						lblPoint.setHorizontalAlignment(SwingConstants.LEFT);
+						lblPoint.setFont(new Font("Dialog", Font.PLAIN, 14));
+						lblPoint.setBounds(175, 110, 138, 34);
+						giftcontentPane.add(lblPoint);
+						rs.close();
+						stmt.close();
+						connection.close();
+					}
+					else{
+						JOptionPane.showInputDialog("Sorry, that's not an valid giftcard number");
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		btnGiftCard.setText("Gift Card");
 		btnGiftCard.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		btnGiftCard.setBounds(472, 352, 129, 63);
@@ -574,6 +638,41 @@ public class CoffeePOS extends JFrame {
 		label_1.setFont(new Font("Dialog", Font.PLAIN, 18));
 		label_1.setBounds(72, 155, 159, 44);
 		pnlCheckout.add(label_1);
+		
+		JLabel lblCreditdebit = new JLabel("Credit/Debit");
+		lblCreditdebit.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCreditdebit.setForeground(new Color(139, 0, 0));
+		lblCreditdebit.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblCreditdebit.setBounds(482, 106, 104, 16);
+		pnlCheckout.add(lblCreditdebit);
+		
+		JLabel lblCash = new JLabel("Cash");
+		lblCash.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCash.setForeground(new Color(139, 0, 0));
+		lblCash.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblCash.setBounds(482, 217, 104, 16);
+		pnlCheckout.add(lblCash);
+		
+		JLabel lblCheck = new JLabel("Check");
+		lblCheck.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCheck.setForeground(new Color(139, 0, 0));
+		lblCheck.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblCheck.setBounds(482, 322, 104, 16);
+		pnlCheckout.add(lblCheck);
+		
+		JLabel lblGiftcard = new JLabel("GiftCard");
+		lblGiftcard.setHorizontalAlignment(SwingConstants.CENTER);
+		lblGiftcard.setForeground(new Color(139, 0, 0));
+		lblGiftcard.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblGiftcard.setBounds(482, 421, 104, 16);
+		pnlCheckout.add(lblGiftcard);
+		
+		JLabel lblCoupon = new JLabel("Coupon");
+		lblCoupon.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCoupon.setForeground(new Color(139, 0, 0));
+		lblCoupon.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblCoupon.setBounds(482, 529, 104, 16);
+		pnlCheckout.add(lblCoupon);
 		
 		c1.show(pnlContainer, "Menu");		
 		
@@ -1054,7 +1153,7 @@ public class CoffeePOS extends JFrame {
 		btnOverridePrice.setFont(new Font("Dialog", Font.PLAIN, 12));
 		btnOverridePrice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				if(isManager){
+
 				int sel = itemlist.getSelectedIndex();
 				if (sel>-1){
 					if(!isManager){
