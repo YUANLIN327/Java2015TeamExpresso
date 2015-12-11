@@ -189,7 +189,7 @@ public class CoffeePOS extends JFrame {
 
 		JRadioButton rdbDinein = new JRadioButton("Dine In");
 		rdbDinein.setForeground(Color.WHITE);
-		rdbDinein.setBounds(573, 13, 97, 50);
+		rdbDinein.setBounds(550, 13, 97, 50);
 		pnlRibbon.add(rdbDinein);
 		rdbDinein.setFont(new Font("Dialog", Font.BOLD, 18));
 		rdbDinein.setBackground(new Color(128, 0, 0));
@@ -1366,7 +1366,7 @@ public class CoffeePOS extends JFrame {
 
 	private String showInputDialog() {
 		String inputValue = JOptionPane
-				.showInputDialog("Please enter cash received. Must larger than or equal to $"
+				.showInputDialog("Please enter cash received. Must be larger than or equal to $"
 						+ txtAmountDue.getText());
 		// if not valid, showInputDialog Method would re-run until
 		if (!inputValue.matches("[0-9.]*")) {
@@ -1582,11 +1582,16 @@ public class CoffeePOS extends JFrame {
 							+ (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 66,
 					110);
 
+		
 			// Show the list of items ordered
 			currentOrder = orders.get(orders.size() - 1);
 			for (int i = 0; i < currentOrder.orderitems.size(); i++) {
-				g2d.drawString(currentOrder.orderitems.get(i).name, 70,
-						135 + 15 * i);
+			String itemname =currentOrder.orderitems.get(i).name;
+			double showprice=items.get(itemname);
+			showprice = Math.round((showprice*100.0)/100.0);
+			g2d.drawString(itemname+"\t"+showprice, 60, 135 + 15 * i);
+			
+			
 
 			}
 
