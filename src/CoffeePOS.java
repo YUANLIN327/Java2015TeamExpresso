@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,34 +59,34 @@ public class CoffeePOS extends JFrame {
 
 	static CoffeePOS frame;
 	private JPanel contentPane;
-	BufferedImage buttonIcon1 = ImageIO.read(new File("Tea.png"));	
-	BufferedImage buttonIcon2 = ImageIO.read(new File("Latte.png"));
-	BufferedImage buttonIcon3 = ImageIO.read(new File("DripCoffee.png"));
-	BufferedImage buttonIcon4 = ImageIO.read(new File("Frappuccino.png"));
-	BufferedImage buttonIcon5 = ImageIO.read(new File("BlackTea.png"));
-	BufferedImage buttonIcon6 = ImageIO.read(new File("ChaiTea.png"));
-	BufferedImage buttonIcon7 = ImageIO.read(new File("HerbalTea.png"));
-	BufferedImage buttonIcon8 = ImageIO.read(new File("RegularCoffee.png"));
-	BufferedImage buttonIcon9 = ImageIO.read(new File("VanillaCoffee.png"));
-	BufferedImage buttonIcon10 = ImageIO.read(new File("PumpkinCoffee.png"));
+	BufferedImage buttonIcon1 = ImageIO.read(this.getClass().getResource("Tea.png"));	
+	BufferedImage buttonIcon2 = ImageIO.read(this.getClass().getResource("Latte.png"));
+	BufferedImage buttonIcon3 = ImageIO.read(this.getClass().getResource("DripCoffee.png"));
+	BufferedImage buttonIcon4 = ImageIO.read(this.getClass().getResource("Frappuccino.png"));
+	BufferedImage buttonIcon5 = ImageIO.read(this.getClass().getResource("BlackTea.png"));
+	BufferedImage buttonIcon6 = ImageIO.read(this.getClass().getResource("ChaiTea.png"));
+	BufferedImage buttonIcon7 = ImageIO.read(this.getClass().getResource("HerbalTea.png"));
+	BufferedImage buttonIcon8 = ImageIO.read(this.getClass().getResource("RegularCoffee.png"));
+	BufferedImage buttonIcon9 = ImageIO.read(this.getClass().getResource("VanillaCoffee.png"));
+	BufferedImage buttonIcon10 = ImageIO.read(this.getClass().getResource("PumpkinCoffee.png"));
 	//Button set 2./*
-	BufferedImage buttonIcon11 = ImageIO.read(new File("ChocolateFrap.png"));
-	BufferedImage buttonIcon12 = ImageIO.read(new File("VanillaFrap.png"));
-	BufferedImage buttonIcon13 = ImageIO.read(new File("CaramelFrap.png"));
-	BufferedImage buttonIcon14 = ImageIO.read(new File("HazelnutLatte.png"));
-	BufferedImage buttonIcon15 = ImageIO.read(new File("MochaLatte.png"));
-	BufferedImage buttonIcon16 = ImageIO.read(new File("VanillaLatte.png"));
-	BufferedImage buttonIcon17 = ImageIO.read(new File("RooibosTea.png")); //rooibos tea
-	BufferedImage buttonIcon18 = ImageIO.read(new File("HazelnutCoffee.png")); //hazelnut coffee
-	BufferedImage buttonIcon19 = ImageIO.read(new File("MintFrap.png")); //mint frap
-	BufferedImage buttonIcon20 = ImageIO.read(new File("CaramelLatte.png")); //caramel latte
-	BufferedImage buttonIcon21 = ImageIO.read(new File("logo.png")); //logi
-	BufferedImage btnIconCash = ImageIO.read(new File("Cash.png")); 
-	BufferedImage btnIconCheck = ImageIO.read(new File("Check.png")); 
-	BufferedImage btnIconCoupon = ImageIO.read(new File("Coupon.png"));
-	BufferedImage btnIconCredit = ImageIO.read(new File("Credit.png")); 
-	BufferedImage btnIconGiftCard = ImageIO.read(new File("GiftCard.png")); 
-	BufferedImage btnIconBack = ImageIO.read(new File("BackIcon.png")); 
+	BufferedImage buttonIcon11 = ImageIO.read(this.getClass().getResource("ChocolateFrap.png"));
+	BufferedImage buttonIcon12 = ImageIO.read(this.getClass().getResource("VanillaFrap.png"));
+	BufferedImage buttonIcon13 = ImageIO.read(this.getClass().getResource("CaramelFrap.png"));
+	BufferedImage buttonIcon14 = ImageIO.read(this.getClass().getResource("HazelnutLatte.png"));
+	BufferedImage buttonIcon15 = ImageIO.read(this.getClass().getResource("MochaLatte.png"));
+	BufferedImage buttonIcon16 = ImageIO.read(this.getClass().getResource("VanillaLatte.png"));
+	BufferedImage buttonIcon17 = ImageIO.read(this.getClass().getResource("RooibosTea.png")); //rooibos tea
+	BufferedImage buttonIcon18 = ImageIO.read(this.getClass().getResource("HazelnutCoffee.png")); //hazelnut coffee
+	BufferedImage buttonIcon19 = ImageIO.read(this.getClass().getResource("MintFrap.png")); //mint frap
+	BufferedImage buttonIcon20 = ImageIO.read(this.getClass().getResource("CaramelLatte.png")); //caramel latte
+	BufferedImage buttonIcon21 = ImageIO.read(this.getClass().getResource("logo.png")); //logi
+	BufferedImage btnIconCash = ImageIO.read(this.getClass().getResource("Cash.png")); 
+	BufferedImage btnIconCheck = ImageIO.read(this.getClass().getResource("Check.png")); 
+	BufferedImage btnIconCoupon = ImageIO.read(this.getClass().getResource("Coupon.png"));
+	BufferedImage btnIconCredit = ImageIO.read(this.getClass().getResource("Credit.png")); 
+	BufferedImage btnIconGiftCard = ImageIO.read(this.getClass().getResource("GiftCard.png")); 
+	BufferedImage btnIconBack = ImageIO.read(this.getClass().getResource("BackIcon.png")); 
 	
 	
 	//initate card layout field instance
@@ -991,7 +992,7 @@ public class CoffeePOS extends JFrame {
 		
 		
 		JButton btnCancel = new JButton("Cancel Order");
-//		btnCancel.setIcon(new ImageIcon(ImageIO.read(new File("Tea.png"))));
+//		btnCancel.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("Tea.png"))));
 		btnCancel.setFont(new Font("Dialog", Font.PLAIN, 14));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
