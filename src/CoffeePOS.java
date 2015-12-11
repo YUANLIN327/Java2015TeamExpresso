@@ -1389,7 +1389,7 @@ public class CoffeePOS extends JFrame {
 //		connection = sqliteConnection.dbConnector();
 		OrderItem oi = new OrderItem(itemname, items.get(itemname));
 		System.out.println(oi.name);
-		if (isOrderEmpty) {
+		if (currentOrder==null) {
 			currentOrder = new Order();
 			orders.add(currentOrder);
 			isOrderEmpty = false;
@@ -1399,7 +1399,7 @@ public class CoffeePOS extends JFrame {
 			updateitemlabel(currentOrder);
 
 		} else {
-			currentOrder = orders.get(orders.size() - 1);
+			
 			boolean isrepeat = false;
 			int position = 0;
 			for (int i = 0; i < currentOrder.orderitems.size(); ++i) {
@@ -1444,6 +1444,10 @@ public class CoffeePOS extends JFrame {
 		txtAmountDue.setText("");
 		txtAmountTendered.setText("");
 		txtChange.setText("");
+		lblDiscount.setText("$0.00");
+		lblSubTotal.setText("$0.00");
+		lblTotal.setText("$0.00");
+		lblTax.setText("$0.00");
 		c1.show(pnlContainer, "Menu");
 
 	}
@@ -1480,6 +1484,8 @@ public class CoffeePOS extends JFrame {
 				e1.printStackTrace();
 			}
 		}
+		
+		clearOrder();
 		// generate on screen receipt:
 		final ReceiptsPanel p = new ReceiptsPanel();
 		JFrame f = new JFrame();
