@@ -1,5 +1,5 @@
 
 public class Customer {
-	int point;
+	double points;
 	String name,GiftCardID;
 }

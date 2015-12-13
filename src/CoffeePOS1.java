@@ -51,6 +51,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JSeparator;
 
 public class CoffeePOS1 extends JFrame {
 
@@ -118,7 +119,7 @@ public class CoffeePOS1 extends JFrame {
 	DefaultListModel<OrderItem1> oidata = new DefaultListModel();
 	JList itemlist = new JList(oidata);
 
-	private JTextField txtAmountDue;
+	private JTextField txtTotal;
 	private JTextField txtChange;
 	boolean isOrderEmpty = true;
 	boolean isManager = false;
@@ -139,6 +140,10 @@ public class CoffeePOS1 extends JFrame {
 	Order1 currentOrder = null;
 	Customer customer = null;
 	Connection connection = null;
+	private JTextField txtCoupon;
+	private JTextField txtBeforeTax;
+	private JTextField txtTax;
+	private JTextField txtItems;
 
 	/**
 	 * Launch the application.
@@ -295,20 +300,20 @@ public class CoffeePOS1 extends JFrame {
 		// add checkout panel to container panel
 		pnlContainer.add(pnlCheckout, "Checkout");
 
-		txtAmountDue = new JTextField();
-		txtAmountDue.setFont(new Font("Dialog", Font.PLAIN, 18));
-		txtAmountDue.setEnabled(false);
-		txtAmountDue.setBounds(242, 39, 172, 56);
-		pnlCheckout.add(txtAmountDue);
-		txtAmountDue.setColumns(10);
-		txtAmountDue.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtTotal = new JTextField();
+		txtTotal.setFont(new Font("Dialog", Font.PLAIN, 18));
+		txtTotal.setEnabled(false);
+		txtTotal.setBounds(242, 335, 151, 39);
+		pnlCheckout.add(txtTotal);
+		txtTotal.setColumns(10);
+		txtTotal.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		txtAmountTendered = new JTextField();
 		txtAmountTendered.setFont(new Font("Dialog", Font.PLAIN, 18));
 		txtAmountTendered.setEnabled(false);
 		txtAmountTendered.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtAmountTendered.setColumns(10);
-		txtAmountTendered.setBounds(242, 155, 172, 56);
+		txtAmountTendered.setBounds(242, 435, 143, 32);
 		pnlCheckout.add(txtAmountTendered);
 
 		txtChange = new JTextField();
@@ -316,7 +321,7 @@ public class CoffeePOS1 extends JFrame {
 		txtChange.setEnabled(false);
 		txtChange.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtChange.setColumns(10);
-		txtChange.setBounds(242, 270, 172, 56);
+		txtChange.setBounds(248, 489, 137, 32);
 		pnlCheckout.add(txtChange);
 
 		// Cashbutton
@@ -331,7 +336,7 @@ public class CoffeePOS1 extends JFrame {
 				BigDecimal tenderedbd = new BigDecimal(change$);
 				while (currentOrder.getTotal().compareTo(tenderedbd) == 1) {
 					change$ = showInputDialog("Please enter cash received. Must be larger than or equal to $"
-							+ txtAmountDue.getText());
+							+ txtTotal.getText());
 					tenderedbd = new BigDecimal(change$);
 				}
 
@@ -437,6 +442,7 @@ public class CoffeePOS1 extends JFrame {
 		pnlCheckout.add(btnCash);
 
 		// check button
+		
 		JButton btnCheck = new JButton(new ImageIcon(btnIconCheck));
 		btnCheck.setText("Check");
 		btnCheck.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
@@ -514,6 +520,7 @@ public class CoffeePOS1 extends JFrame {
 		btnCoupon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean isfound = false;
+				
 				String coupon$ = JOptionPane.showInputDialog("Please enter the valid coupon code."
 						+ "(Case sensitive)");
 				BigDecimal couponbd = new BigDecimal("0.00");
@@ -542,7 +549,7 @@ public class CoffeePOS1 extends JFrame {
 					NumberFormat nf2= NumberFormat
 							.getCurrencyInstance(Locale.US);
 					updateitemlabel(currentOrder);
-					txtAmountDue.setText("" + nf2.format(currentOrder.getTotal()));
+					txtTotal.setText("" + nf2.format(currentOrder.getTotal()));
 					JOptionPane.showMessageDialog(null, "Congratulations! A "
 							+ nf1.format(currentOrder.couponbd)
 							+ " dicount has been applied!");
@@ -578,7 +585,7 @@ public class CoffeePOS1 extends JFrame {
 						customer = new Customer();
 						customer.GiftCardID=rs.getString("GiftCard");
 						customer.name=rs.getString("Name");
-						customer.point=rs.getInt("Points");
+						customer.points=rs.getDouble("Points");
 						counter++;
 					}
 					if(counter>=1){
@@ -607,7 +614,7 @@ public class CoffeePOS1 extends JFrame {
 						lblPointsAvailable.setBounds(10, 110, 138, 34);
 						giftcontentPane.add(lblPointsAvailable);
 						
-						JLabel lblPoint = new JLabel(""+customer.point);
+						JLabel lblPoint = new JLabel(""+customer.points);
 						lblPoint.setHorizontalAlignment(SwingConstants.LEFT);
 						lblPoint.setFont(new Font("Dialog", Font.PLAIN, 14));
 						lblPoint.setBounds(175, 110, 138, 34);
@@ -641,22 +648,22 @@ public class CoffeePOS1 extends JFrame {
 		btnBack.setBorderPainted(false);
 		pnlCheckout.add(btnBack);
 
-		JLabel lblNewLabel_1 = new JLabel("Amount Due: ");
+		JLabel lblNewLabel_1 = new JLabel("Items:");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 18));
-		lblNewLabel_1.setBounds(72, 37, 143, 63);
+		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblNewLabel_1.setBounds(72, 37, 119, 39);
 		pnlCheckout.add(lblNewLabel_1);
 
 		JLabel lblChange = new JLabel("Change: ");
 		lblChange.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblChange.setFont(new Font("Dialog", Font.PLAIN, 18));
-		lblChange.setBounds(114, 270, 101, 46);
+		lblChange.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblChange.setBounds(120, 489, 101, 46);
 		pnlCheckout.add(lblChange);
 
 		JLabel label_1 = new JLabel("Amount Tendered: ");
 		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_1.setFont(new Font("Dialog", Font.PLAIN, 18));
-		label_1.setBounds(72, 155, 159, 44);
+		label_1.setFont(new Font("Dialog", Font.PLAIN, 14));
+		label_1.setBounds(72, 435, 159, 44);
 		pnlCheckout.add(label_1);
 
 		JLabel lblCreditdebit = new JLabel("Credit/Debit");
@@ -700,6 +707,70 @@ public class CoffeePOS1 extends JFrame {
 		lblEmployeeDiscount.setFont(new Font("Dialog", Font.PLAIN, 16));
 		lblEmployeeDiscount.setBounds(472, 445, 143, 16);
 		pnlCheckout.add(lblEmployeeDiscount);
+		
+		JLabel lblCouponReceived = new JLabel("Received 0% Off");
+		lblCouponReceived.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCouponReceived.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblCouponReceived.setBounds(72, 103, 119, 39);
+		pnlCheckout.add(lblCouponReceived);
+		
+		txtCoupon = new JTextField();
+		txtCoupon.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtCoupon.setFont(new Font("Dialog", Font.PLAIN, 18));
+		txtCoupon.setEnabled(false);
+		txtCoupon.setColumns(10);
+		txtCoupon.setBounds(242, 105, 151, 39);
+		pnlCheckout.add(txtCoupon);
+		
+		JLabel lblTotalBeforeTax = new JLabel("Total before Tax:");
+		lblTotalBeforeTax.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTotalBeforeTax.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblTotalBeforeTax.setBounds(72, 179, 119, 39);
+		pnlCheckout.add(lblTotalBeforeTax);
+		
+		txtBeforeTax = new JTextField();
+		txtBeforeTax.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtBeforeTax.setFont(new Font("Dialog", Font.PLAIN, 18));
+		txtBeforeTax.setEnabled(false);
+		txtBeforeTax.setColumns(10);
+		txtBeforeTax.setBounds(242, 181, 151, 39);
+		pnlCheckout.add(txtBeforeTax);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(108, 166, 285, 2);
+		pnlCheckout.add(separator);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(120, 322, 285, 2);
+		pnlCheckout.add(separator_1);
+		
+		JLabel lblEstimatedTax = new JLabel("Estimated Tax:");
+		lblEstimatedTax.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblEstimatedTax.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblEstimatedTax.setBounds(72, 253, 119, 39);
+		pnlCheckout.add(lblEstimatedTax);
+		
+		txtTax = new JTextField();
+		txtTax.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtTax.setFont(new Font("Dialog", Font.PLAIN, 18));
+		txtTax.setEnabled(false);
+		txtTax.setColumns(10);
+		txtTax.setBounds(242, 255, 151, 39);
+		pnlCheckout.add(txtTax);
+		
+		JLabel lblTotal = new JLabel("Total:");
+		lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTotal.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblTotal.setBounds(72, 335, 119, 39);
+		pnlCheckout.add(lblTotal);
+		
+		txtItems = new JTextField();
+		txtItems.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtItems.setFont(new Font("Dialog", Font.PLAIN, 18));
+		txtItems.setEnabled(false);
+		txtItems.setColumns(10);
+		txtItems.setBounds(242, 36, 151, 39);
+		pnlCheckout.add(txtItems);
 
 		c1.show(pnlContainer, "Menu");
 
@@ -1224,7 +1295,7 @@ public class CoffeePOS1 extends JFrame {
 				if (currentOrder!=null) {
 					NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
 					c1.show(pnlContainer, "Checkout");
-					txtAmountDue.setText(nf.format(currentOrder.getTotal()));
+					txtTotal.setText(nf.format(currentOrder.getTotal()));
 				} else {
 
 				}
@@ -1413,7 +1484,7 @@ public class CoffeePOS1 extends JFrame {
 		isOrderEmpty = true;
 		currentOrder=null;
 		customer=null;
-		txtAmountDue.setText("");
+		txtTotal.setText("");
 		txtAmountTendered.setText("");
 		txtChange.setText("");
 		lblSubTotal.setText("$0.00");
@@ -1427,7 +1498,7 @@ public class CoffeePOS1 extends JFrame {
 			System.out.println("not null");
 			connection = sqliteConnection.dbConnector();
 			boolean isFound = false;
-		
+			double newpoints=0.0;
 			try {
 				
 				String querysearch = "Select * from Customer where GiftCard=?";
@@ -1437,23 +1508,20 @@ public class CoffeePOS1 extends JFrame {
 				System.out.println("execute querysearch");
 				while(rs.next()){	
 					isFound = true;
-					System.out.println("before update");
-					String queryupdate = "Update Customer Set Points=? where GiftCard=?";
-					PreparedStatement pstupdate = connection.prepareStatement(queryupdate);
-					pstupdate.setString(1,"800");
-					pstupdate.setString(2, customer.GiftCardID);
-					ResultSet rsupdate = pstupdate.executeQuery();					
-					System.out.println(rsupdate.getString("Points"));
-					rsupdate.close();
-					pstupdate.close();
+					System.out.println(" "+rs.getDouble("Points"));
+					newpoints = rs.getDouble("Points")+currentOrder.getSubtotal().doubleValue()*100.0;			
 				}
 				if(isFound){
+						
+					String queryupdate = "Update Customer Set Points=? where GiftCard=?";
+					PreparedStatement pstupdate = connection.prepareStatement(queryupdate);
+					pstupdate.setDouble(1,newpoints);
+					pstupdate.setString(2, customer.GiftCardID);
+					pstupdate.executeUpdate();					
 					
-					System.out.println("new points: "+rs.getInt("Points"));
-				}
-				else{
 					
 				}
+				
 				rs.close();
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
@@ -1499,12 +1567,12 @@ public class CoffeePOS1 extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ta.append("Total Amount Due: " + txtAmountDue.getText() + "\n"
+				ta.append("Total Amount Due: " + txtTotal.getText() + "\n"
 						+ "Amount Tendered: " + txtAmountTendered.getText()
 						+ "\n" + "Change: " + txtChange.getText());
 				String report$ = "";
 				report$ += "Thank you for shopping at iCoffeeShop. We really appreciate your business. \n";
-				report$ += "Your order total is $" + txtAmountDue.getText()
+				report$ += "Your order total is $" + txtTotal.getText()
 						+ ".\n";
 
 				String mailto = "John_Carlson@Baylor.edu?SUBJECT=Reciept [iCoffee Shoppe]&BODY="
