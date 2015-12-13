@@ -35,11 +35,15 @@ public class Order1{
 			return discount1;
 		}
 		
+		public BigDecimal getBeforeTax(){
+			BigDecimal beforetax=getSubtotal().subtract(getDiscount());
+			beforetax=beforetax.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+			return beforetax;
+		}
+		
 		public BigDecimal getTax(){
-			BigDecimal tax = getSubtotal().subtract(getDiscount());
-//			tax = tax.setScale(4, BigDecimal.ROUND_HALF_EVEN);
-			tax = tax.multiply(taxrate);
-			tax = tax.setScale(2, BigDecimal.ROUND_HALF_EVEN);			
+			BigDecimal tax=	getBeforeTax().multiply(taxrate);
+			tax = tax.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 			return tax;
 		}
 		
