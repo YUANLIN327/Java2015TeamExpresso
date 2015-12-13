@@ -13,6 +13,8 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -118,20 +120,25 @@ public class CoffeePOS1 extends JFrame {
 	CardLayout cmenu = new CardLayout();
 	DefaultListModel<OrderItem1> oidata = new DefaultListModel();
 	JList itemlist = new JList(oidata);
-
-	private JTextField txtTotal;
 	private JTextField txtChange;
 	boolean isOrderEmpty = true;
 	boolean isManager = false;
 	JLabel lblSubTotal;
 	JLabel lblWelcome;
+	JLabel lblCouponReceived;
+	JLabel lblTotalAmount;
 	JButton btnOverridePrice;
 	JFrame Receipt = new JFrame();
 	JPanel categoryContainer;
 	JPanel pnlContainer;
 	Desktop desktop = null;
 	ArrayList<Order1> orders = new ArrayList<Order1>();
-	HashMap<String, BigDecimal> couponcode = new HashMap<String,BigDecimal>();
+	
+	NumberFormat nfpercent = NumberFormat
+			.getPercentInstance(Locale.US);					
+	NumberFormat nfcurrency= NumberFormat
+			.getCurrencyInstance(Locale.US);
+	
 	private JTextField txtAmountTendered;
 	JTextArea ta = new JTextArea();
 	String CashAmt;
@@ -300,14 +307,6 @@ public class CoffeePOS1 extends JFrame {
 		// add checkout panel to container panel
 		pnlContainer.add(pnlCheckout, "Checkout");
 
-		txtTotal = new JTextField();
-		txtTotal.setFont(new Font("Dialog", Font.PLAIN, 18));
-		txtTotal.setEnabled(false);
-		txtTotal.setBounds(242, 335, 151, 39);
-		pnlCheckout.add(txtTotal);
-		txtTotal.setColumns(10);
-		txtTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-
 		txtAmountTendered = new JTextField();
 		txtAmountTendered.setFont(new Font("Dialog", Font.PLAIN, 18));
 		txtAmountTendered.setEnabled(false);
@@ -331,22 +330,114 @@ public class CoffeePOS1 extends JFrame {
 		btnCash.setBounds(472, 148, 129, 63);
 		btnCash.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);				
-				String change$ = "0.00";
-				BigDecimal tenderedbd = new BigDecimal(change$);
-				while (currentOrder.getTotal().compareTo(tenderedbd) == 1) {
-					change$ = showInputDialog("Please enter cash received. Must be larger than or equal to $"
-							+ txtTotal.getText());
-					tenderedbd = new BigDecimal(change$);
-				}
+//				NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);				
+//				String change$ = "0.00";
+//				BigDecimal tenderedbd = new BigDecimal(change$);
+//				while (currentOrder.getTotal().compareTo(tenderedbd) == 1) {
+//					change$ = showInputDialog("Please enter cash received. Must be larger than or equal to $"
+//							+ txtTotal.getText());
+//					tenderedbd = new BigDecimal(change$);
+//				}
+//
+//				BigDecimal changebd = tenderedbd.subtract(currentOrder.getTotal());
+//				changebd = changebd.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+//				txtAmountTendered.setText(tenderedbd.toString());
+//				txtChange.setText(changebd.toString());
+//				triggerReceipt();
 
-				BigDecimal changebd = tenderedbd.subtract(currentOrder.getTotal());
-				changebd = changebd.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-				txtAmountTendered.setText(tenderedbd.toString());
-				txtChange.setText(changebd.toString());
-				triggerReceipt();
+				final JFrame cashFrame = new JFrame();
+				cashFrame.setTitle("Check");
+				cashFrame.setBounds(100, 100, 349, 292);
+				cashFrame.setVisible(true);
 
-//				clearOrder();
+				JPanel cashContentPane = new JPanel();
+				cashContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+				cashContentPane.setLayout(null);
+				cashFrame.setContentPane(cashContentPane);
+
+				JLabel lblChange = new JLabel("cash Routing No:");
+				lblChange.setFont(new Font("Dialog", Font.BOLD, 12));
+				lblChange.setBounds(35, 88, 150, 18);
+				cashContentPane.add(lblChange);
+
+				final JTextField txtChange = new JTextField();
+				txtChange.setColumns(10);
+				txtChange.setBounds(35, 109, 263, 29);
+				cashContentPane.add(txtChange);
+				txtChange.setEnabled(false);
+				
+				JLabel lblNewLabel = new JLabel("Amount Tendered:");
+				lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 12));
+				lblNewLabel.setBounds(35, 27, 104, 18);
+				cashContentPane.add(lblNewLabel);
+
+				final JTextField txtAmountTendered = new JTextField();
+				txtAmountTendered.setBounds(35, 48, 263, 29);
+				cashContentPane.add(txtAmountTendered);
+				txtAmountTendered.setColumns(10);
+				txtAmountTendered.addKeyListener(new KeyAdapter() {
+					@Override
+					public void keyPressed(KeyEvent evt) {
+						int key = evt.getKeyCode();
+						txtAmountTendered.setEditable(true);
+						
+
+						
+//						if((key>=KeyEvent.VK_0 && key<=KeyEvent.VK_9)||(key>=KeyEvent.VK_NUMPAD0 &&key<=KeyEvent.VK_NUMPAD9)||
+//								key==KeyEvent.VK_BACK_SPACE||key==KeyEvent.VK_PERIOD){
+//				
+//						}
+//						else{
+//							txtAmountTendered.setEditable(false);
+//						}
+					}
+				
+				});
+
+
+			
+
+				
+				JButton btnCalculate = new JButton("CalCulate");
+				btnCalculate.setBounds(35, 156, 89, 36);
+				cashContentPane.add(btnCalculate);
+				btnCalculate.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						BigDecimal changebd = new BigDecimal(txtAmountTendered.getText());
+						changebd = changebd.subtract(currentOrder.getTotal());
+						changebd = changebd.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+						txtChange.setText(changebd.toString());
+						
+					}
+				});
+				
+				JButton btnSubmit = new JButton("Submit");
+				btnSubmit.setBounds(135, 156, 89, 36);
+				cashContentPane.add(btnSubmit);
+				btnSubmit.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						triggerReceipt();
+						ta.append("This is for credit card");
+						
+					}
+				});
+
+				JButton btnCancel = new JButton("Cancel");
+				btnCancel.setBounds(235, 156, 89, 36);
+				cashContentPane.add(btnCancel);
+				btnCancel.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						cashFrame.dispose();
+						
+					}
+				});
+			
+		
+				
+				
 
 			}
 
@@ -450,7 +541,7 @@ public class CoffeePOS1 extends JFrame {
 		btnCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				JFrame checkFrame = new JFrame();
+				final JFrame checkFrame = new JFrame();
 				checkFrame.setTitle("Check");
 				checkFrame.setBounds(100, 100, 349, 392);
 				checkFrame.setVisible(true);
@@ -505,11 +596,14 @@ public class CoffeePOS1 extends JFrame {
 				JButton btnCancel = new JButton("Cancel");
 				btnCancel.setBounds(194, 306, 89, 36);
 				checkContentPane.add(btnCancel);
-				// if(e.getSource()==btnCancel){
-				//
-				// frameToClose.dispose();
-				//
-				// }
+				btnCancel.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						checkFrame.dispose();
+						
+					}
+				});
+			
 			}
 		});
 
@@ -544,14 +638,11 @@ public class CoffeePOS1 extends JFrame {
 				
 			
 				if (isfound) {
-					NumberFormat nf1 = NumberFormat
-							.getPercentInstance(Locale.US);					
-					NumberFormat nf2= NumberFormat
-							.getCurrencyInstance(Locale.US);
+			
 					updateitemlabel(currentOrder);
-					txtTotal.setText("" + nf2.format(currentOrder.getTotal()));
+					lblCouponReceived.setText("Received "+nfpercent.format(currentOrder.couponbd)+" Off");
 					JOptionPane.showMessageDialog(null, "Congratulations! A "
-							+ nf1.format(currentOrder.couponbd)
+							+ nfpercent.format(currentOrder.couponbd)
 							+ " dicount has been applied!");
 				} else {
 					JOptionPane.showMessageDialog(null,
@@ -708,7 +799,7 @@ public class CoffeePOS1 extends JFrame {
 		lblEmployeeDiscount.setBounds(472, 445, 143, 16);
 		pnlCheckout.add(lblEmployeeDiscount);
 		
-		JLabel lblCouponReceived = new JLabel("Received 0% Off");
+		lblCouponReceived = new JLabel("Received 0% Off");
 		lblCouponReceived.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblCouponReceived.setFont(new Font("Dialog", Font.PLAIN, 14));
 		lblCouponReceived.setBounds(72, 103, 119, 39);
@@ -716,7 +807,7 @@ public class CoffeePOS1 extends JFrame {
 		
 		txtCoupon = new JTextField();
 		txtCoupon.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtCoupon.setFont(new Font("Dialog", Font.PLAIN, 18));
+		txtCoupon.setFont(new Font("Dialog", Font.PLAIN, 14));
 		txtCoupon.setEnabled(false);
 		txtCoupon.setColumns(10);
 		txtCoupon.setBounds(242, 105, 151, 39);
@@ -730,7 +821,7 @@ public class CoffeePOS1 extends JFrame {
 		
 		txtBeforeTax = new JTextField();
 		txtBeforeTax.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtBeforeTax.setFont(new Font("Dialog", Font.PLAIN, 18));
+		txtBeforeTax.setFont(new Font("Dialog", Font.PLAIN, 14));
 		txtBeforeTax.setEnabled(false);
 		txtBeforeTax.setColumns(10);
 		txtBeforeTax.setBounds(242, 181, 151, 39);
@@ -752,7 +843,7 @@ public class CoffeePOS1 extends JFrame {
 		
 		txtTax = new JTextField();
 		txtTax.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtTax.setFont(new Font("Dialog", Font.PLAIN, 18));
+		txtTax.setFont(new Font("Dialog", Font.PLAIN, 14));
 		txtTax.setEnabled(false);
 		txtTax.setColumns(10);
 		txtTax.setBounds(242, 255, 151, 39);
@@ -766,11 +857,18 @@ public class CoffeePOS1 extends JFrame {
 		
 		txtItems = new JTextField();
 		txtItems.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtItems.setFont(new Font("Dialog", Font.PLAIN, 18));
+		txtItems.setFont(new Font("Dialog", Font.PLAIN, 14));
 		txtItems.setEnabled(false);
 		txtItems.setColumns(10);
 		txtItems.setBounds(242, 36, 151, 39);
 		pnlCheckout.add(txtItems);
+		
+		lblTotalAmount = new JLabel("$0.00");
+		lblTotalAmount.setForeground(Color.RED);
+		lblTotalAmount.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTotalAmount.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblTotalAmount.setBounds(274, 335, 119, 39);
+		pnlCheckout.add(lblTotalAmount);
 
 		c1.show(pnlContainer, "Menu");
 
@@ -1292,10 +1390,9 @@ public class CoffeePOS1 extends JFrame {
 		btnSubmitOrder.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		btnSubmitOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (currentOrder!=null) {
-					NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+				if (currentOrder!=null) {					
 					c1.show(pnlContainer, "Checkout");
-					txtTotal.setText(nf.format(currentOrder.getTotal()));
+					updateitemlabel(currentOrder);
 				} else {
 
 				}
@@ -1374,12 +1471,6 @@ public class CoffeePOS1 extends JFrame {
 
 
 
-		// coupon code
-		couponcode.put("linyuan", new BigDecimal("0.1"));
-		couponcode.put("xichen", new BigDecimal("0.27"));
-		couponcode.put("samdawson", new BigDecimal("0.2"));
-		couponcode.put("claudiazamudio", new BigDecimal("0.25"));
-		couponcode.put("halliemillin", new BigDecimal("0.3"));
 
 	}
 
@@ -1475,8 +1566,15 @@ public class CoffeePOS1 extends JFrame {
 	}
 
 	public void updateitemlabel(Order1 currOrder) {
+		
 		System.out.println("updateitemlabel runned");		
 		lblSubTotal.setText("$" + currentOrder.getSubtotal());
+		txtItems.setText(nfcurrency.format(currentOrder.getSubtotal()));
+		txtCoupon.setText(nfcurrency.format(currentOrder.getDiscount()));
+		txtBeforeTax.setText(nfcurrency.format(currentOrder.getBeforeTax()));
+		txtTax.setText(nfcurrency.format(currentOrder.getTax()));
+		lblTotalAmount.setText(nfcurrency.format(currentOrder.getTotal()));
+		
 	}
 
 	private void clearOrder() {
@@ -1484,7 +1582,11 @@ public class CoffeePOS1 extends JFrame {
 		isOrderEmpty = true;
 		currentOrder=null;
 		customer=null;
-		txtTotal.setText("");
+		txtItems.setText("");
+		txtCoupon.setText("");
+		txtBeforeTax.setText("");
+		txtTax.setText("");
+		lblTotalAmount.setText("$0.00");
 		txtAmountTendered.setText("");
 		txtChange.setText("");
 		lblSubTotal.setText("$0.00");
@@ -1567,12 +1669,13 @@ public class CoffeePOS1 extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ta.append("Total Amount Due: " + txtTotal.getText() + "\n"
+			
+				ta.append("Total Amount Due: " + nfcurrency.format(currentOrder.getTotal()) + "\n"
 						+ "Amount Tendered: " + txtAmountTendered.getText()
 						+ "\n" + "Change: " + txtChange.getText());
 				String report$ = "";
 				report$ += "Thank you for shopping at iCoffeeShop. We really appreciate your business. \n";
-				report$ += "Your order total is $" + txtTotal.getText()
+				report$ += "Your order total is $" + nfcurrency.format(currentOrder.getTotal()) 
 						+ ".\n";
 
 				String mailto = "John_Carlson@Baylor.edu?SUBJECT=Reciept [iCoffee Shoppe]&BODY="
@@ -1649,8 +1752,8 @@ public class CoffeePOS1 extends JFrame {
 			
 			for (int i = 0; i < currentOrder.orderitems.size(); i++) {
 				String itemname =currentOrder.orderitems.get(i).name;
-				NumberFormat nf =NumberFormat.getCurrencyInstance(Locale.US);
-				g2d.drawString(itemname+"\t"+nf.format(currentOrder.orderitems.get(i).Unitprice), 60, 135 + 15 * i);
+				
+				g2d.drawString(itemname+"\t"+nfcurrency.format(currentOrder.orderitems.get(i).Unitprice), 60, 135 + 15 * i);
 
 			}
 
