@@ -24,7 +24,7 @@ public class EmployeeLogin1 {
 	JPasswordField pswPassword;
 	boolean isOveriding=false;
 	ArrayList<OrderItem1> items=null;
-	Order1 passOrder;
+	CoffeePOS1 coffeeapp=null;
 	int sel=0;
 
 	/**
@@ -104,22 +104,16 @@ public class EmployeeLogin1 {
 					}
 					if(counter>=1){						
 						System.out.println("Run before ismanager");
-						CoffeePOS1 coffeeapp = new CoffeePOS1();
-						coffeeapp.lblWelcome.setText( "Welcome "+ name$);
+						
 						
 						System.out.println("Run before isfirstimelogin");
-						if (isOveriding){
-							
-							
-							coffeeapp.currentOrder=passOrder;
-							System.out.println("Run when orveriding");
-							for (OrderItem1 oi :passOrder.orderitems){
-								coffeeapp.oidata.addElement(oi);								
-								System.out.println("adding item");
-							}
-							coffeeapp.updateitemlabel(coffeeapp.currentOrder);
-							coffeeapp.itemlist.setSelectedIndex(sel);
-							
+						if (isOveriding){						
+							coffeeapp.lblWelcome.setText( "Welcome "+ name$);
+						}
+						else{
+							coffeeapp = new CoffeePOS1();
+							coffeeapp.lblWelcome.setText( "Welcome "+ name$);
+							coffeeapp.setVisible(true);
 						}
 						System.out.println("Run after isoverriding");
 						if (isManager){
@@ -133,7 +127,7 @@ public class EmployeeLogin1 {
 						}
 						
 						System.out.println("Run after ismanager");
-						coffeeapp.setVisible(true);
+						
 						loginFrame.dispose();
 					
 					}

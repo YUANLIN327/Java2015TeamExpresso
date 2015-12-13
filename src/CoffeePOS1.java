@@ -138,7 +138,6 @@ public class CoffeePOS1 extends JFrame {
 	private JTextField txtSearch;
 	Order1 currentOrder = null;
 	Customer customer = null;
-
 	Connection connection = null;
 
 	/**
@@ -1188,12 +1187,12 @@ public class CoffeePOS1 extends JFrame {
 										+ "Do you want to log out and re-login as a manager?");
 						if (dialogResult == JOptionPane.YES_OPTION) {
 							EmployeeLogin1 emapp = new EmployeeLogin1();
+							emapp.coffeeapp=CoffeePOS1.this;
 							emapp.isOveriding = true;
 							emapp.items = currentOrder.orderitems;
 							emapp.sel = sel;
-							emapp.passOrder=currentOrder;
 							emapp.loginFrame.setVisible(true);
-							frame.dispose();
+							
 						}
 					} else {
 						System.out.println("before itemlist");
@@ -1413,6 +1412,7 @@ public class CoffeePOS1 extends JFrame {
 		oidata.removeAllElements();
 		isOrderEmpty = true;
 		currentOrder=null;
+		customer=null;
 		txtAmountDue.setText("");
 		txtAmountTendered.setText("");
 		txtChange.setText("");
@@ -1426,28 +1426,35 @@ public class CoffeePOS1 extends JFrame {
 		if(customer!=null){
 			System.out.println("not null");
 			connection = sqliteConnection.dbConnector();
-			int counter=0;	
+			boolean isFound = false;
 		
 			try {
 				
 				String querysearch = "Select * from Customer where GiftCard=?";
 				PreparedStatement pst = connection.prepareStatement(querysearch);
 				pst.setString(1,customer.GiftCardID);
-				System.out.println(customer.GiftCardID);
 				ResultSet rs = pst.executeQuery();
 				System.out.println("execute querysearch");
 				while(rs.next()){	
+					isFound = true;
 					System.out.println("before update");
-					String queryupdate = "Update Customer Set Points=?";
+					String queryupdate = "Update Customer Set Points=? where GiftCard=?";
 					PreparedStatement pstupdate = connection.prepareStatement(queryupdate);
 					pstupdate.setString(1,"800");
-					pstupdate.executeQuery();
-					counter++;
-					System.out.println("after update");
+					pstupdate.setString(2, customer.GiftCardID);
+					ResultSet rsupdate = pstupdate.executeQuery();					
+					System.out.println(rsupdate.getString("Points"));
+					rsupdate.close();
+					pstupdate.close();
 				}
-				if(counter>=1){
+				if(isFound){
+					
 					System.out.println("new points: "+rs.getInt("Points"));
 				}
+				else{
+					
+				}
+				rs.close();
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
