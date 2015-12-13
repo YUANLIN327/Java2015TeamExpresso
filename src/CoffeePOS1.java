@@ -327,23 +327,22 @@ public class CoffeePOS1 extends JFrame {
 		btnCash.setBounds(472, 148, 129, 63);
 		btnCash.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
-				BigDecimal totalbd = new BigDecimal(txtAmountDue.getText());
+				NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);				
 				String change$ = "0.00";
 				BigDecimal tenderedbd = new BigDecimal(change$);
-				while (totalbd.compareTo(tenderedbd) == 1) {
+				while (currentOrder.getTotal().compareTo(tenderedbd) == 1) {
 					change$ = showInputDialog("Please enter cash received. Must be larger than or equal to $"
 							+ txtAmountDue.getText());
 					tenderedbd = new BigDecimal(change$);
 				}
 
-				BigDecimal changebd = tenderedbd.subtract(totalbd);
+				BigDecimal changebd = tenderedbd.subtract(currentOrder.getTotal());
 				changebd = changebd.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 				txtAmountTendered.setText(tenderedbd.toString());
 				txtChange.setText(changebd.toString());
 				triggerReceipt();
 
-				clearOrder();
+//				clearOrder();
 
 			}
 
@@ -425,7 +424,7 @@ public class CoffeePOS1 extends JFrame {
 							public void actionPerformed(ActionEvent e) {
 								triggerReceipt();
 								ta.append("This is for credit card");
-								clearOrder();
+//								clearOrder();
 							}
 						});
 
@@ -494,7 +493,7 @@ public class CoffeePOS1 extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						triggerReceipt();
 						ta.append("This is for credit card");
-						clearOrder();
+						
 					}
 				});
 
@@ -1455,7 +1454,7 @@ public class CoffeePOS1 extends JFrame {
 			}
 		}
 		
-		clearOrder();
+		
 		// generate on screen receipt:
 		final ReceiptsPanel p = new ReceiptsPanel();
 		JFrame f = new JFrame();
@@ -1484,6 +1483,7 @@ public class CoffeePOS1 extends JFrame {
 						System.out.println("Error printing: " + x_x);
 					}
 				}
+				clearOrder();
 			}
 		});
 
@@ -1517,7 +1517,11 @@ public class CoffeePOS1 extends JFrame {
 					e1.printStackTrace();
 
 				}
+				
+				clearOrder();
 			}
+
+
 
 		});
 	}
@@ -1567,7 +1571,7 @@ public class CoffeePOS1 extends JFrame {
 
 		
 			// Show the list of items ordered
-			currentOrder = orders.get(orders.size() - 1);
+			
 			for (int i = 0; i < currentOrder.orderitems.size(); i++) {
 				String itemname =currentOrder.orderitems.get(i).name;
 				NumberFormat nf =NumberFormat.getCurrencyInstance(Locale.US);
