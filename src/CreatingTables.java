@@ -95,7 +95,7 @@ public class CreatingTables extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Statement stmt=null;
 				String employeerquery="CREATE TABLE EmployeeInfo ("
-						+"Employee_ID INTEGER PRIMARY KEY  NOT NULL ,"
+						+"Employee_ID TEXT PRIMARY KEY  NOT NULL ,"
 						+"Name TEXT,"
 						+"UserName TEXT,"
 						+"password TEXT,"
@@ -145,8 +145,8 @@ public class CreatingTables extends JFrame {
 				Statement stmt=null;
 				String orderquery="CREATE TABLE OrderInfo ("
 						+"Order_ID INTEGER PRIMARY KEY ,"
-						+"Customer_ID INTEGER references Customer(Customer_ID) NOT NULL ,"
-						+"Employee_ID INTEGER references EmployeeInfo(Employee_ID) NOT NULL ,"					
+						+"Customer_ID TEXT references Customer(Customer_ID) NOT NULL ,"
+						+"Employee_ID TEXT references EmployeeInfo(Employee_ID) NOT NULL ,"					
 						+"Order_Date DATETIME,"
 						+"Balance DOUBLE"
 						+");";
@@ -164,6 +164,25 @@ public class CreatingTables extends JFrame {
 		contentPane.add(btnOrder);
 		
 		JButton btnOrderItem = new JButton("Create OrderItem Table");
+		btnOrderItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Statement stmt=null;
+				String orderitemquery="CREATE TABLE OrderItem("
+						+"OrderItem_ID INTEGER PRIMARY KEY ,"
+						+"Order_ID INTEGER references OrderInfo(Order_ID) NOT NULL ,"
+						+"Product_ID INTEGER references Item(Product_ID) NOT NULL ,"					
+						+"Quantity INTEGER NOT NULL"
+						+");";
+				try {
+					stmt = connection.createStatement();
+					stmt.executeUpdate(orderitemquery);								
+					System.out.println("orderitem query created sucessfully");
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnOrderItem.setBounds(411, 124, 192, 54);
 		contentPane.add(btnOrderItem);
 	}

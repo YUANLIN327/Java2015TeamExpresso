@@ -37,7 +37,7 @@ public class SqlAddingItems extends JFrame {
 	 */
 	public SqlAddingItems() {
 		
-		connection  = sqliteConnection.dbConnector();
+		connection  = sqliteConnection1.dbConnector();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -53,25 +53,25 @@ public class SqlAddingItems extends JFrame {
 					Statement stm = connection.createStatement();
 					connection.setAutoCommit(false);
 					//insert item
-//					String sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Black Tea','Tea','1.5');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Chai Tea','Tea','1.75');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Herbal Tea','Tea','1.25');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Rooibos Tea','Tea',' 1.75');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Regular Coffee','DripCoffee','1.25');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Coffee','DripCoffee','1.5');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Pumpkin Coffee','DripCoffee','1.6');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Hazelnut Coffee', 'DripCoffee','1.7');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Chocolate Frap','Frappuccino','3.25');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Frap','Frappuccino','3.5');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Caramel Frap','Frappuccino','3.6');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Mint Frap','Frappuccino','3.7');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Hazelnut Latte','Latte','3.25');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Mocha','Latte','3.5');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Latte','Latte','3.6');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Caramel Latte','Latte','3.6');";stm.executeUpdate(sql);
+					String sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Black Tea','Tea','1.5');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Chai Tea','Tea','1.75');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Herbal Tea','Tea','1.25');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Rooibos Tea','Tea',' 1.75');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Regular Coffee','DripCoffee','1.25');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Coffee','DripCoffee','1.5');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Pumpkin Coffee','DripCoffee','1.6');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Hazelnut Coffee', 'DripCoffee','1.7');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Chocolate Frap','Frappuccino','3.25');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Frap','Frappuccino','3.5');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Caramel Frap','Frappuccino','3.6');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Mint Frap','Frappuccino','3.7');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Hazelnut Latte','Latte','3.25');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Mocha','Latte','3.5');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Latte','Latte','3.6');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Caramel Latte','Latte','3.6');";stm.executeUpdate(sql);
 					
 //					insert coupon
-					String sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('Hallie','0.18');";
+					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('Hallie','0.18');";
 					stm.executeUpdate(sql);
 					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('linyuan','0.27');";
 					stm.executeUpdate(sql);

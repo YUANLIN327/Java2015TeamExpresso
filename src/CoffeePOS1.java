@@ -1566,7 +1566,14 @@ public class CoffeePOS1 extends JFrame {
 		lblTotalAmount.setText(nfcurrency.format(currentOrder.getTotal()));
 		
 	}
-
+	
+	public void insertOrder(Order1 currOrder) {		
+		
+		if(connection==null){
+			connection = sqliteConnection.dbConnector();
+		}
+	}
+	
 	private void clearOrder() {
 		oidata.removeAllElements();
 		isOrderEmpty = true;
@@ -1583,6 +1590,7 @@ public class CoffeePOS1 extends JFrame {
 		c1.show(pnlContainer, "Menu");
 
 	}
+	
 
 	private void triggerReceipt() {
 		
