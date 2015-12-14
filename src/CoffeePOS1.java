@@ -330,20 +330,6 @@ public class CoffeePOS1 extends JFrame {
 		btnCash.setBounds(472, 148, 129, 63);
 		btnCash.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);				
-//				String change$ = "0.00";
-//				BigDecimal tenderedbd = new BigDecimal(change$);
-//				while (currentOrder.getTotal().compareTo(tenderedbd) == 1) {
-//					change$ = showInputDialog("Please enter cash received. Must be larger than or equal to $"
-//							+ txtTotal.getText());
-//					tenderedbd = new BigDecimal(change$);
-//				}
-//
-//				BigDecimal changebd = tenderedbd.subtract(currentOrder.getTotal());
-//				changebd = changebd.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-//				txtAmountTendered.setText(tenderedbd.toString());
-//				txtChange.setText(changebd.toString());
-//				triggerReceipt();
 
 				final JFrame cashFrame = new JFrame();
 				cashFrame.setTitle("Check");
@@ -380,22 +366,19 @@ public class CoffeePOS1 extends JFrame {
 					public void keyPressed(KeyEvent evt) {
 						int key = evt.getKeyCode();
 						txtAmountTendered.setEditable(true);
-						
-
-						
-//						if((key>=KeyEvent.VK_0 && key<=KeyEvent.VK_9)||(key>=KeyEvent.VK_NUMPAD0 &&key<=KeyEvent.VK_NUMPAD9)||
-//								key==KeyEvent.VK_BACK_SPACE||key==KeyEvent.VK_PERIOD){
-//				
-//						}
-//						else{
-//							txtAmountTendered.setEditable(false);
-//						}
-					}
+					
+						if((key>=KeyEvent.VK_0 && key<=KeyEvent.VK_9)||key==KeyEvent.VK_BACK_SPACE||
+								(key>=KeyEvent.VK_NUMPAD0 &&key<=KeyEvent.VK_NUMPAD9)||key==KeyEvent.VK_PERIOD){
+							txtAmountTendered.setEditable(true);
+						}
+						else{
+							txtAmountTendered.setEditable(false);
+						}
+						}
 				
 				});
 
 
-			
 
 				
 				JButton btnCalculate = new JButton("CalCulate");
@@ -407,7 +390,14 @@ public class CoffeePOS1 extends JFrame {
 						BigDecimal changebd = new BigDecimal(txtAmountTendered.getText());
 						changebd = changebd.subtract(currentOrder.getTotal());
 						changebd = changebd.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-						txtChange.setText(changebd.toString());
+						if(changebd.compareTo(new BigDecimal("0.00"))>=0){
+							txtChange.setText(changebd.toString());
+						}
+						else{
+							JOptionPane.showMessageDialog(null,"Ah oh, amount tendered should be larger than total due.");
+							txtAmountTendered.setText("");							
+						}
+						
 						
 					}
 				});

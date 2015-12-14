@@ -70,16 +70,16 @@ public class SqlAddingItems extends JFrame {
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Latte','Latte','3.6');";stm.executeUpdate(sql);
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Caramel Latte','Latte','3.6');";stm.executeUpdate(sql);
 					
-					//insert coupon
-//					String sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('Hallie','0.18');";
-//					stm.executeUpdate(sql);
-//					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('linyuan','0.27');";
-//					stm.executeUpdate(sql);
-//					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('xichen','0.20');";
-//					stm.executeUpdate(sql);
-//					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('claudia','0.15');";
-//					stm.executeUpdate(sql);
-//					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('sam','0.05');";
+//					insert coupon
+					String sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('Hallie','0.18');";
+					stm.executeUpdate(sql);
+					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('linyuan','0.27');";
+					stm.executeUpdate(sql);
+					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('xichen','0.20');";
+					stm.executeUpdate(sql);
+					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('claudia','0.15');";
+					stm.executeUpdate(sql);
+					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('sam','0.05');";
 //					stm.executeUpdate(sql);
 					
 					System.out.println("runs");					

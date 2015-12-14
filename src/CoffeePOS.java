@@ -564,7 +564,7 @@ public class CoffeePOS extends JFrame {
 						customer = new Customer();
 						customer.GiftCardID=rs.getString("GiftCard");
 						customer.name=rs.getString("Name");
-						customer.point=rs.getInt("Points");
+						customer.points=rs.getDouble("Points");
 						counter++;
 					}
 					if(counter>=1){
@@ -593,7 +593,7 @@ public class CoffeePOS extends JFrame {
 						lblPointsAvailable.setBounds(10, 110, 138, 34);
 						giftcontentPane.add(lblPointsAvailable);
 						
-						JLabel lblPoint = new JLabel(""+customer.point);
+						JLabel lblPoint = new JLabel(""+customer.points);
 						lblPoint.setHorizontalAlignment(SwingConstants.LEFT);
 						lblPoint.setFont(new Font("Dialog", Font.PLAIN, 14));
 						lblPoint.setBounds(175, 110, 138, 34);

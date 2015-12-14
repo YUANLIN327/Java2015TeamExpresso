@@ -48,7 +48,7 @@ public class Textfield_playground extends JFrame {
 			public void keyPressed(KeyEvent evt) {
 				int key = evt.getKeyCode();
 				
-				if(key>=KeyEvent.VK_0 && key<=KeyEvent.VK_9){
+				if((key>=KeyEvent.VK_0 && key<=KeyEvent.VK_9)||key==KeyEvent.VK_BACK_SPACE){
 					textField.setEditable(true);
 				}
 				else{
