@@ -11,7 +11,7 @@ public class sqliteConnection1 {
 		try{
 			Class.forName("org.sqlite.JDBC");
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:ExpressoData.sqlite");
-			System.out.println("Connection built");
+			System.out.println("Connection built with expressodata.sqlite");
 			return conn;
 		}
 		catch(Exception e){

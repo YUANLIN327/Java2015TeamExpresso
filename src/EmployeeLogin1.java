@@ -35,7 +35,7 @@ public class EmployeeLogin1 {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EmployeeLogin window = new EmployeeLogin();
+					EmployeeLogin1 window = new EmployeeLogin1();
 					window.loginFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,7 +51,7 @@ public class EmployeeLogin1 {
 	 */
 	public EmployeeLogin1() {
 		initialize();
-		connection  = sqliteConnection.dbConnector();
+		connection  = sqliteConnection1.dbConnector();
 	}
 
 	/**
@@ -105,8 +105,7 @@ public class EmployeeLogin1 {
 						System.out.println(isManager);
 					}
 					if(counter>=1){						
-						System.out.println("Run before ismanager");						
-						System.out.println("Run before isfirstimelogin");
+						System.out.println("Run before ismanager");					
 						coffeeapp.currentemployeeid=employeeid;
 						coffeeapp.isManager = isManager;
 						coffeeapp.lblWelcome.setText( "Welcome "+ name$);

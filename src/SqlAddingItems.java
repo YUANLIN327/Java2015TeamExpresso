@@ -56,7 +56,7 @@ public class SqlAddingItems extends JFrame {
 					String sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Black Tea','Tea','1.5');";stm.executeUpdate(sql);
 					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Chai Tea','Tea','1.75');";stm.executeUpdate(sql);
 					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Herbal Tea','Tea','1.25');";stm.executeUpdate(sql);
-					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Rooibos Tea','Tea',' 1.75');";stm.executeUpdate(sql);
+					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Rooibos Tea','Tea','1.75');";stm.executeUpdate(sql);
 					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Regular Coffee','DripCoffee','1.25');";stm.executeUpdate(sql);
 					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Coffee','DripCoffee','1.5');";stm.executeUpdate(sql);
 					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Pumpkin Coffee','DripCoffee','1.6');";stm.executeUpdate(sql);
