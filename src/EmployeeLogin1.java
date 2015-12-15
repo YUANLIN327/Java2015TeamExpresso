@@ -51,7 +51,7 @@ public class EmployeeLogin1 {
 	 */
 	public EmployeeLogin1() {
 		initialize();
-		connection  = sqliteConnection1.dbConnector();
+		connection  = sqliteConnection.dbConnector();
 	}
 
 	/**
@@ -106,15 +106,16 @@ public class EmployeeLogin1 {
 					}
 					if(counter>=1){						
 						System.out.println("Run before ismanager");					
-						coffeeapp.currentemployeeid=employeeid;
-						coffeeapp.isManager = isManager;
-						coffeeapp.lblWelcome.setText( "Welcome "+ name$);
 						
-						if (!isOveriding){						
+						
+						if (!isOveriding){	
+							System.out.println("Run here");	
 							coffeeapp = new CoffeePOS1();							
 							coffeeapp.setVisible(true);
 						}						
-						
+						coffeeapp.currentemployeeid=employeeid;
+						coffeeapp.isManager = isManager;
+						coffeeapp.lblWelcome.setText( "Welcome "+ name$);
 						if (isManager){						
 							System.out.println("manager");
 							JOptionPane.showMessageDialog(null,"Welcome Manager Yuan");
