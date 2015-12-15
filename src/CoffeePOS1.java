@@ -132,6 +132,7 @@ public class CoffeePOS1 extends JFrame {
 	JPanel categoryContainer;
 	JPanel pnlContainer;
 	Desktop desktop = null;
+	int currentemployeeid;
 	ArrayList<Order1> orders = new ArrayList<Order1>();
 	
 	NumberFormat nfpercent = NumberFormat
@@ -177,7 +178,7 @@ public class CoffeePOS1 extends JFrame {
 	 */
 
 	public CoffeePOS1() throws IOException {
-		connection = sqliteConnection.dbConnector();
+		connection = sqliteConnection1.dbConnector();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1100, 700);
@@ -1572,6 +1573,9 @@ public class CoffeePOS1 extends JFrame {
 		if(connection==null){
 			connection = sqliteConnection.dbConnector();
 		}
+		
+		PreparedStatement pst = null;
+		String insertorderquery="";
 	}
 	
 	private void clearOrder() {
