@@ -25,6 +25,7 @@ public class EmployeeLogin1 {
 	boolean isOveriding=false;
 	ArrayList<OrderItem1> items=null;
 	CoffeePOS1 coffeeapp=null;
+	int employeeid;
 	int sel=0;
 
 	/**
@@ -34,7 +35,7 @@ public class EmployeeLogin1 {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EmployeeLogin window = new EmployeeLogin();
+					EmployeeLogin1 window = new EmployeeLogin1();
 					window.loginFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,7 +51,7 @@ public class EmployeeLogin1 {
 	 */
 	public EmployeeLogin1() {
 		initialize();
-		connection  = sqliteConnection.dbConnector();
+		connection  = sqliteConnection1.dbConnector();
 	}
 
 	/**
@@ -100,31 +101,25 @@ public class EmployeeLogin1 {
 						counter++;
 						name$=rs.getString("name");
 						isManager = rs.getBoolean("Is_Manager");
+						employeeid = rs.getInt("Employee_id");
 						System.out.println(isManager);
 					}
 					if(counter>=1){						
-						System.out.println("Run before ismanager");
+						System.out.println("Run before ismanager");					
+						coffeeapp.currentemployeeid=employeeid;
+						coffeeapp.isManager = isManager;
+						coffeeapp.lblWelcome.setText( "Welcome "+ name$);
 						
-						
-						System.out.println("Run before isfirstimelogin");
-						if (isOveriding){						
-							coffeeapp.lblWelcome.setText( "Welcome "+ name$);
-						}
-						else{
-							coffeeapp = new CoffeePOS1();
-							coffeeapp.lblWelcome.setText( "Welcome "+ name$);
+						if (!isOveriding){						
+							coffeeapp = new CoffeePOS1();							
 							coffeeapp.setVisible(true);
-						}
-						System.out.println("Run after isoverriding");
-						if (isManager){
-							coffeeapp.isManager=true;							
+						}						
+						
+						if (isManager){						
 							System.out.println("manager");
-							JOptionPane.showMessageDialog(null,"Welcome Manager Chen");
+							JOptionPane.showMessageDialog(null,"Welcome Manager Yuan");
 							
-						}
-						else{
-							coffeeapp.isManager=false;							
-						}
+						}						
 						
 						System.out.println("Run after ismanager");
 						
