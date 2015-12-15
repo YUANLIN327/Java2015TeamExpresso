@@ -25,7 +25,7 @@ public class EmployeeLogin1 {
 	boolean isOveriding=false;
 	ArrayList<OrderItem1> items=null;
 	CoffeePOS1 coffeeapp=null;
-	int employeeid;
+	String employeeid;
 	int sel=0;
 
 	/**
@@ -101,20 +101,19 @@ public class EmployeeLogin1 {
 						counter++;
 						name$=rs.getString("name");
 						isManager = rs.getBoolean("Is_Manager");
-						employeeid = rs.getInt("Employee_id");
+						employeeid = rs.getString("Employee_id");
 						System.out.println(isManager);
 					}
 					if(counter>=1){						
 						System.out.println("Run before ismanager");					
-						coffeeapp.currentemployeeid=employeeid;
-						coffeeapp.isManager = isManager;
-						coffeeapp.lblWelcome.setText( "Welcome "+ name$);
-						
-						if (!isOveriding){						
+						if (!isOveriding){	
+							System.out.println("Run here");	
 							coffeeapp = new CoffeePOS1();							
 							coffeeapp.setVisible(true);
 						}						
-						
+						coffeeapp.currentemployeeid=employeeid;
+						coffeeapp.isManager = isManager;
+						coffeeapp.lblWelcome.setText( "Welcome "+ name$);
 						if (isManager){						
 							System.out.println("manager");
 							JOptionPane.showMessageDialog(null,"Welcome Manager Yuan");

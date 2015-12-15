@@ -1,8 +1,12 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -50,13 +54,14 @@ public class SqlAddingItems extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
+					String sql="";
 					Statement stm = connection.createStatement();
 					connection.setAutoCommit(false);
 					//insert item
-//					String sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Black Tea','Tea','1.5');";stm.executeUpdate(sql);
+//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Black Tea','Tea','1.5');";stm.executeUpdate(sql);
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Chai Tea','Tea','1.75');";stm.executeUpdate(sql);
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Herbal Tea','Tea','1.25');";stm.executeUpdate(sql);
-//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Rooibos Tea','Tea',' 1.75');";stm.executeUpdate(sql);
+//					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Rooibos Tea','Tea','1.75');";stm.executeUpdate(sql);
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Regular Coffee','DripCoffee','1.25');";stm.executeUpdate(sql);
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Coffee','DripCoffee','1.5');";stm.executeUpdate(sql);
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Pumpkin Coffee','DripCoffee','1.6');";stm.executeUpdate(sql);
@@ -69,18 +74,33 @@ public class SqlAddingItems extends JFrame {
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Mocha','Latte','3.5');";stm.executeUpdate(sql);
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Vanilla Latte','Latte','3.6');";stm.executeUpdate(sql);
 //					sql = "INSERT INTO ITEM(Name,Category,UnitPrice) VALUES('Caramel Latte','Latte','3.6');";stm.executeUpdate(sql);
-					
-//					insert coupon
-					String sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('Hallie','0.18');";
-					stm.executeUpdate(sql);
-					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('linyuan','0.27');";
-					stm.executeUpdate(sql);
-					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('xichen','0.20');";
-					stm.executeUpdate(sql);
-					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('claudia','0.15');";
-					stm.executeUpdate(sql);
-					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('sam','0.05');";
+//					
+////					insert coupon
+//					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('Hallie','0.18');";
 //					stm.executeUpdate(sql);
+//					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('linyuan','0.27');";
+//					stm.executeUpdate(sql);
+//					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('xichen','0.20');";
+//					stm.executeUpdate(sql);
+//					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('claudia','0.15');";
+//					stm.executeUpdate(sql);
+//					sql = "INSERT INTO COUPON(CouponCode,CouponAmount) VALUES('sam','0.05');";
+//					stm.executeUpdate(sql);
+					
+					//order
+					String eid="1";
+					DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+					Date date = new Date();
+					String datetime = df.format(date);
+					sql ="INSERT INTO OrderInfo(Employee_id,Order_Date) VALUES("
+							+"'"+eid+"',"
+							+"'"+datetime+"'"
+							+");";
+					stm.executeUpdate(sql);
+
+					
+							
+					
 					
 					System.out.println("runs");					
 					stm.close();

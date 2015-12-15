@@ -7,10 +7,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.SystemColor;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -29,11 +27,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
@@ -49,11 +49,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JSeparator;
 
 public class CoffeePOS1 extends JFrame {
 
@@ -120,7 +120,6 @@ public class CoffeePOS1 extends JFrame {
 	CardLayout cmenu = new CardLayout();
 	DefaultListModel<OrderItem1> oidata = new DefaultListModel();
 	JList itemlist = new JList(oidata);
-	private JTextField txtChange;
 	boolean isOrderEmpty = true;
 	boolean isManager = false;
 	JLabel lblSubTotal;
@@ -132,14 +131,13 @@ public class CoffeePOS1 extends JFrame {
 	JPanel categoryContainer;
 	JPanel pnlContainer;
 	Desktop desktop = null;
+	String currentemployeeid;
 	ArrayList<Order1> orders = new ArrayList<Order1>();
 	
 	NumberFormat nfpercent = NumberFormat
 			.getPercentInstance(Locale.US);					
 	NumberFormat nfcurrency= NumberFormat
 			.getCurrencyInstance(Locale.US);
-	
-	private JTextField txtAmountTendered;
 	JTextArea ta = new JTextArea();
 	String CashAmt;
 	String CurrentEmployee = "";
@@ -151,6 +149,8 @@ public class CoffeePOS1 extends JFrame {
 	private JTextField txtBeforeTax;
 	private JTextField txtTax;
 	private JTextField txtItems;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -306,22 +306,6 @@ public class CoffeePOS1 extends JFrame {
 
 		// add checkout panel to container panel
 		pnlContainer.add(pnlCheckout, "Checkout");
-
-		txtAmountTendered = new JTextField();
-		txtAmountTendered.setFont(new Font("Dialog", Font.PLAIN, 18));
-		txtAmountTendered.setEnabled(false);
-		txtAmountTendered.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtAmountTendered.setColumns(10);
-		txtAmountTendered.setBounds(242, 435, 143, 32);
-		pnlCheckout.add(txtAmountTendered);
-
-		txtChange = new JTextField();
-		txtChange.setFont(new Font("Dialog", Font.PLAIN, 18));
-		txtChange.setEnabled(false);
-		txtChange.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtChange.setColumns(10);
-		txtChange.setBounds(248, 489, 137, 32);
-		pnlCheckout.add(txtChange);
 
 		// Cashbutton
 		JButton btnCash = new JButton(new ImageIcon(btnIconCash));
@@ -735,18 +719,6 @@ public class CoffeePOS1 extends JFrame {
 		lblNewLabel_1.setBounds(72, 37, 119, 39);
 		pnlCheckout.add(lblNewLabel_1);
 
-		JLabel lblChange = new JLabel("Change: ");
-		lblChange.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblChange.setFont(new Font("Dialog", Font.PLAIN, 14));
-		lblChange.setBounds(120, 489, 101, 46);
-		pnlCheckout.add(lblChange);
-
-		JLabel label_1 = new JLabel("Amount Tendered: ");
-		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_1.setFont(new Font("Dialog", Font.PLAIN, 14));
-		label_1.setBounds(72, 435, 159, 44);
-		pnlCheckout.add(label_1);
-
 		JLabel lblCreditdebit = new JLabel("Credit/Debit");
 		lblCreditdebit.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCreditdebit.setForeground(new Color(139, 0, 0));
@@ -859,6 +831,15 @@ public class CoffeePOS1 extends JFrame {
 		lblTotalAmount.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblTotalAmount.setBounds(274, 335, 119, 39);
 		pnlCheckout.add(lblTotalAmount);
+		
+		JButton btnNewButton = new JButton("Insert Order");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				insertOrder(currentOrder);
+			}
+		});
+		btnNewButton.setBounds(171, 427, 151, 52);
+		pnlCheckout.add(btnNewButton);
 
 		c1.show(pnlContainer, "Menu");
 
@@ -944,7 +925,7 @@ public class CoffeePOS1 extends JFrame {
 		btnRooibosTea.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JButton b = (JButton) e.getSource();
-				addOrderItem("Rooibos Tea");
+				addOrderItem(b.getText());
 			}
 		});
 		btnRooibosTea.setBounds(270, 270, 180, 120);
@@ -1566,7 +1547,33 @@ public class CoffeePOS1 extends JFrame {
 		lblTotalAmount.setText(nfcurrency.format(currentOrder.getTotal()));
 		
 	}
-
+	
+	public void insertOrder(Order1 currOrder) {		
+		
+		if(connection==null){
+			connection = sqliteConnection.dbConnector();
+		}
+		
+		
+		try {
+			Statement stm =connection.createStatement();
+			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date date = new Date();
+			String datetime = df.format(date);
+			String insertorderquery ="INSERT INTO OrderInfo(Employee_id,Order_Date) VALUES("
+					+"'"+currentemployeeid+"',"
+					+"'"+datetime+"'"
+					+");";
+			stm.executeUpdate(insertorderquery);
+			System.out.println("Insert order successfully");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+	}
+	
 	private void clearOrder() {
 		oidata.removeAllElements();
 		isOrderEmpty = true;
@@ -1577,12 +1584,11 @@ public class CoffeePOS1 extends JFrame {
 		txtBeforeTax.setText("");
 		txtTax.setText("");
 		lblTotalAmount.setText("$0.00");
-		txtAmountTendered.setText("");
-		txtChange.setText("");
 		lblSubTotal.setText("$0.00");
 		c1.show(pnlContainer, "Menu");
 
 	}
+	
 
 	private void triggerReceipt() {
 		
@@ -1660,9 +1666,7 @@ public class CoffeePOS1 extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 			
-				ta.append("Total Amount Due: " + nfcurrency.format(currentOrder.getTotal()) + "\n"
-						+ "Amount Tendered: " + txtAmountTendered.getText()
-						+ "\n" + "Change: " + txtChange.getText());
+				ta.append("Total Amount Due: " + nfcurrency.format(currentOrder.getTotal()));
 				String report$ = "";
 				report$ += "Thank you for shopping at iCoffeeShop. We really appreciate your business. \n";
 				report$ += "Your order total is $" + nfcurrency.format(currentOrder.getTotal()) 
