@@ -50,7 +50,7 @@ public class EmployeeLogin {
 	 */
 	public EmployeeLogin() {
 		initialize();
-		connection  = sqliteConnection1.dbConnector();
+		connection  = sqliteConnection.dbConnector();
 	}
 
 	/**

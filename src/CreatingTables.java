@@ -36,7 +36,7 @@ public class CreatingTables extends JFrame {
 	 * Create the frame.
 	 */
 	public CreatingTables() {
-		connection = sqliteConnection1.dbConnector();
+		connection = sqliteConnection.dbConnector();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 657, 459);
@@ -144,8 +144,8 @@ public class CreatingTables extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Statement stmt=null;
 				String orderquery="CREATE TABLE OrderInfo ("
-						+"Order_ID INTEGER PRIMARY KEY ,"
-						+"Customer_ID TEXT references Customer(Customer_ID) NOT NULL ,"
+						+"Order_ID INTEGER PRIMARY KEY NOT NULL,"
+						+"Customer_ID TEXT references Customer(Customer_ID) ,"
 						+"Employee_ID TEXT references EmployeeInfo(Employee_ID) NOT NULL ,"					
 						+"Order_Date DATETIME,"
 						+"Balance DOUBLE"

@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -130,7 +131,7 @@ public class CoffeePOS1 extends JFrame {
 	JPanel categoryContainer;
 	JPanel pnlContainer;
 	Desktop desktop = null;
-	int currentemployeeid;
+	String currentemployeeid;
 	ArrayList<Order1> orders = new ArrayList<Order1>();
 	
 	NumberFormat nfpercent = NumberFormat
@@ -176,7 +177,7 @@ public class CoffeePOS1 extends JFrame {
 	 */
 
 	public CoffeePOS1() throws IOException {
-		connection = sqliteConnection1.dbConnector();
+		connection = sqliteConnection.dbConnector();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1100, 700);
@@ -241,7 +242,7 @@ public class CoffeePOS1 extends JFrame {
 				String category$ = "";
 				int counter = 0;
 				if(connection==null){
-					connection = sqliteConnection1.dbConnector();
+					connection = sqliteConnection.dbConnector();
 				}
 				try {
 					String query = "Select * from Item where name=?";
@@ -592,7 +593,7 @@ public class CoffeePOS1 extends JFrame {
 						+ "(Case sensitive)");
 				BigDecimal couponbd = new BigDecimal("0.00");
 				if(connection == null){
-					connection = sqliteConnection1.dbConnector();
+					connection = sqliteConnection.dbConnector();
 				}
 				
 				try {
@@ -633,7 +634,7 @@ public class CoffeePOS1 extends JFrame {
 		btnGiftCard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("run 1");
-				connection = sqliteConnection1.dbConnector();
+				connection = sqliteConnection.dbConnector();
 				int counter=0;
 				String gift$ = JOptionPane.showInputDialog("Please enter your 5 digits giftcard#");			
 			
@@ -1464,7 +1465,7 @@ public class CoffeePOS1 extends JFrame {
 
 
 		if(connection==null){
-			connection = sqliteConnection1.dbConnector();
+			connection = sqliteConnection.dbConnector();
 		}
 		try {
 			String query = "Select UnitPrice from Item where name=?";
@@ -1550,18 +1551,20 @@ public class CoffeePOS1 extends JFrame {
 	public void insertOrder(Order1 currOrder) {		
 		
 		if(connection==null){
-			connection = sqliteConnection1.dbConnector();
+			connection = sqliteConnection.dbConnector();
 		}
 		
 		
 		try {
-			String insertorderquery="INSERT INTO OrderInfo('Employee_id','Order_Date') VALUES(?,?)";
-			PreparedStatement pst = connection.prepareStatement(insertorderquery);
+			Statement stm =connection.createStatement();
 			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Date date = new Date();
-			pst.setInt(1, currentemployeeid);
-			pst.setString(2, df.format(date));
-			pst.executeUpdate(insertorderquery);
+			String datetime = df.format(date);
+			String insertorderquery ="INSERT INTO OrderInfo(Employee_id,Order_Date) VALUES("
+					+"'"+currentemployeeid+"',"
+					+"'"+datetime+"'"
+					+");";
+			stm.executeUpdate(insertorderquery);
 			System.out.println("Insert order successfully");
 			
 		} catch (SQLException e) {
@@ -1591,7 +1594,7 @@ public class CoffeePOS1 extends JFrame {
 		
 		if(customer!=null){
 			System.out.println("not null");
-			connection = sqliteConnection1.dbConnector();
+			connection = sqliteConnection.dbConnector();
 			boolean isFound = false;
 			double newpoints=0.0;
 			try {
